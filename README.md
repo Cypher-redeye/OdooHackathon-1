@@ -49,13 +49,18 @@ Built for the **Odoo Hackathon 2026**.
 
 ## 📁 Project Structure
 OdooHackathon/
-├── traveloop-app/              # Next.js frontend
+├── traveloop-app/          # Next.js frontend
 │   ├── app/
 │   │   ├── (main)/
 │   │   │   ├── dashboard/
 │   │   │   ├── trips/
+│   │   │   │   ├── [id]/
+│   │   │   │   │   ├── budget/
+│   │   │   │   │   └── builder/
+│   │   │   │   └── create/
 │   │   │   ├── search/city/
 │   │   │   └── profile/
+│   │   ├── auth/
 │   │   ├── globals.css
 │   │   ├── layout.tsx
 │   │   └── page.tsx
@@ -69,20 +74,18 @@ OdooHackathon/
 │   ├── tailwind.config.ts
 │   └── package.json
 │
-└── backend/                    # Express.js backend
-├── lib/
-│   └── prisma.js           # Prisma client with Neon adapter
-├── prisma/
-│   ├── schema.prisma       # DB models
-│   └── migrations/
-├── routes/
-│   ├── auth.js             # /api/auth/signup, /api/auth/login
-│   └── trip.js             # /api/trips
-├── prisma.config.ts        # Prisma 7 config with DATABASE_URL
-├── server.js               # Entry point
-└── package.json
-
----
+└── backend/                # Express.js backend
+    ├── lib/
+    │   └── prisma.js       # Prisma client with Neon adapter
+    ├── prisma/
+    │   ├── schema.prisma   # DB models
+    │   └── migrations/
+    ├── routes/
+    │   ├── auth.js         # /api/auth/signup, /api/auth/login
+    │   └── trip.js         # /api/trips
+    ├── prisma.config.ts    # Prisma 7 config
+    ├── server.js           # Entry point
+    └── package.json
 
 ## 🗄️ Database Schema
 User        → id, email, password
