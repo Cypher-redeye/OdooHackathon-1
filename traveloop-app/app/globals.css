@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #0f0c29;
+    --foreground: #ffffff;
+    --font-clash-display: 'Clash Display', sans-serif;
+    --font-cabinet-grotesk: 'Cabinet Grotesk', sans-serif;
+  }
+
+  body {
+    background-color: var(--background);
+    background-image: linear-gradient(to bottom right, #0f0c29, #302b63, #24243e);
+    color: var(--foreground);
+    min-height: 100vh;
+    font-family: 'Cabinet Grotesk', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Clash Display', sans-serif;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] shadow-primary-500/20;
+  }
+  .glass-button {
+    @apply bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 rounded-xl transition-all duration-300;
+  }
+  .glass-input {
+    @apply bg-white/5 border border-white/10 rounded-xl focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none placeholder-white/40 text-white px-4 py-3;
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-primary-600;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
