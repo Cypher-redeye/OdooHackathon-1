@@ -36,18 +36,62 @@ export default function CreateTripPage() {
     setDestinations(destinations.filter(d => d !== dest));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const form = e.target as HTMLFormElement;
+      const inputs = form.querySelectorAll('input');
+      const textarea = form.querySelector('textarea');
+      
+      const name = inputs[0].value;
+      const startDate = inputs[1].value;
+      const endDate = inputs[2].value;
+      const description = textarea?.value || "";
+
+      // Decode token to get user ID
+      const token = localStorage.getItem("token");
+      let userId = 1; // Fallback
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          if (payload.id) userId = payload.id;
+        } catch (e) {
+          console.error("Failed to parse token");
+        }
+      }
+
+      const response = await fetch("http://localhost:5000/api/trips", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          description,
+          startDate,
+          endDate,
+          userId,
+          destinations
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create trip");
+      }
+
+      const trip = await response.json();
       setIsSuccess(true);
       
       setTimeout(() => {
-        router.push("/trips/1/builder");
+        router.push(`/trips/${trip.id}/builder`);
       }, 1000);
-    }, 2000);
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

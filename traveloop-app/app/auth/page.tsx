@@ -16,13 +16,68 @@ export default function AuthPage() {
     setDimensions({ width: window.innerWidth, height: window.innerHeight });
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
+    
+    // Get form data based on login or signup
+    const form = e.target as HTMLFormElement;
+    const inputs = form.querySelectorAll('input');
+    
+    // For signup, inputs: [FullName, Email, Password, ConfirmPassword]
+    // For login, inputs: [Email, Password]
+    let name = "";
+    let email = "";
+    let password = "";
+    
+    if (isLogin) {
+      email = inputs[0].value;
+      password = inputs[1].value;
+    } else {
+      name = inputs[0].value;
+      email = inputs[1].value;
+      password = inputs[2].value;
+      const confirmPassword = inputs[3].value;
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        setIsLoading(false);
+        return;
+      }
+    }
+
+    try {
+      const endpoint = isLogin ? "/api/auth/login" : "/api/auth/signup";
+      const bodyPayload = isLogin ? { email, password } : { name, email, password };
+      
+      const response = await fetch(`http://localhost:5000${endpoint}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyPayload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Authentication failed");
+      }
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+      // On successful signup, you could either log them in or ask to login
+      if (!isLogin && !data.token) {
+        setIsLogin(true);
+        form.reset();
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
       setIsLoading(false);
-      router.push("/dashboard");
-    }, 1500);
+    }
   };
 
   return (

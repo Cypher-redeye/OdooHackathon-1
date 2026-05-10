@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { User, Mail, MapPin, Calendar, Globe, Edit2, Camera, Shield, Bell, Moon, LogOut, Plane } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -15,15 +16,56 @@ const itemVariants = {
   show: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 300, damping: 24 } }
 };
 
-const TRAVEL_STATS = [
-  { label: "Trips Planned", value: "12", icon: Plane },
-  { label: "Countries", value: "8", icon: Globe },
-  { label: "Cities Explored", value: "24", icon: MapPin },
-  { label: "Member Since", value: "2024", icon: Calendar },
-];
-
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push("/auth");
+        return;
+      }
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/me", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.ok) {
+          setUser(await res.json());
+        } else {
+          router.push("/auth");
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchUser();
+  }, [router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/auth");
+  };
+
+  if (isLoading) {
+    return <div className="max-w-4xl mx-auto p-8 text-center text-white/60">Loading profile...</div>;
+  }
+
+  const joinYear = user?.createdAt ? new Date(user.createdAt).getFullYear() : "2024";
+
+  const TRAVEL_STATS = [
+    { label: "Trips Planned", value: user?.stats?.tripsPlanned?.toString() || "0", icon: Plane },
+    { label: "Countries", value: "0", icon: Globe },
+    { label: "Cities Explored", value: "0", icon: MapPin },
+    { label: "Member Since", value: joinYear.toString(), icon: Calendar },
+  ];
+
+  const userInitials = user?.name ? user.name.charAt(0).toUpperCase() : "U";
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -48,7 +90,7 @@ export default function ProfilePage() {
             {/* Avatar */}
             <div className="relative">
               <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-3xl font-heading font-bold text-white border-4 border-[#0F0A07] shadow-xl">
-                T
+                {userInitials}
               </div>
               <button className="absolute -bottom-1 -right-1 w-7 h-7 bg-primary-500 rounded-lg flex items-center justify-center text-white hover:bg-primary-400 transition-colors shadow-lg">
                 <Camera className="w-3.5 h-3.5" />
@@ -56,8 +98,8 @@ export default function ProfilePage() {
             </div>
 
             <div className="flex-1">
-              <h1 className="text-2xl font-heading font-bold text-white">Traveler</h1>
-              <p className="text-white/60 text-sm">traveler@traveloop.com</p>
+              <h1 className="text-2xl font-heading font-bold text-white">{user?.name || "Traveler"}</h1>
+              <p className="text-white/60 text-sm">{user?.email || "traveler@traveloop.com"}</p>
             </div>
 
             <button
@@ -106,7 +148,7 @@ export default function ProfilePage() {
               <label className="text-xs text-white/50 uppercase tracking-wider font-medium">Full Name</label>
               <input
                 type="text"
-                defaultValue="Traveler"
+                defaultValue={user?.name || ""}
                 disabled={!isEditing}
                 className="w-full glass-input mt-1 disabled:opacity-50 disabled:cursor-not-allowed"
               />
@@ -115,7 +157,7 @@ export default function ProfilePage() {
               <label className="text-xs text-white/50 uppercase tracking-wider font-medium">Email</label>
               <input
                 type="email"
-                defaultValue="traveler@traveloop.com"
+                defaultValue={user?.email || ""}
                 disabled={!isEditing}
                 className="w-full glass-input mt-1 disabled:opacity-50 disabled:cursor-not-allowed"
               />
@@ -179,13 +221,13 @@ export default function ProfilePage() {
           </div>
 
           <div className="pt-2">
-            <Link
-              href="/"
+            <button
+              onClick={handleLogout}
               className="w-full py-3 flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 rounded-xl font-medium transition-colors"
             >
               <LogOut className="w-4 h-4" />
               Sign Out
-            </Link>
+            </button>
           </div>
         </motion.div>
       </motion.div>

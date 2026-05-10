@@ -1,19 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, MapPin, Star, DollarSign, TrendingUp, Filter, X } from "lucide-react";
-
-const DESTINATIONS = [
-  { id: 1, city: "Bali", country: "Indonesia", cost: "Low", stars: 4.8, trending: true, tags: ["Beach", "Culture"], image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1000&auto=format&fit=crop" },
-  { id: 2, city: "Paris", country: "France", cost: "High", stars: 4.9, trending: true, tags: ["Romance", "Culture"], image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1000&auto=format&fit=crop" },
-  { id: 3, city: "Dubai", country: "UAE", cost: "High", stars: 4.7, trending: false, tags: ["Luxury", "Shopping"], image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1000&auto=format&fit=crop" },
-  { id: 4, city: "Tokyo", country: "Japan", cost: "Medium", stars: 4.9, trending: true, tags: ["Culture", "Food"], image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1000&auto=format&fit=crop" },
-  { id: 5, city: "Santorini", country: "Greece", cost: "Medium", stars: 4.8, trending: false, tags: ["Beach", "Romance"], image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?q=80&w=1000&auto=format&fit=crop" },
-  { id: 6, city: "New York", country: "USA", cost: "High", stars: 4.6, trending: false, tags: ["City", "Shopping"], image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=1000&auto=format&fit=crop" },
-  { id: 7, city: "Maldives", country: "Maldives", cost: "High", stars: 4.9, trending: true, tags: ["Beach", "Luxury"], image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?q=80&w=1000&auto=format&fit=crop" },
-  { id: 8, city: "Barcelona", country: "Spain", cost: "Medium", stars: 4.7, trending: false, tags: ["Culture", "Beach"], image: "https://images.unsplash.com/photo-1583422409516-2895a77efded?q=80&w=1000&auto=format&fit=crop" },
-];
 
 const ALL_TAGS = ["All", "Beach", "Culture", "Romance", "Luxury", "Food", "City", "Shopping"];
 
@@ -30,8 +19,48 @@ const itemVariants = {
 export default function SearchCityPage() {
   const [query, setQuery] = useState("");
   const [activeTag, setActiveTag] = useState("All");
+  const [destinations, setDestinations] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const filtered = DESTINATIONS.filter(dest => {
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/trips/all");
+        if (res.ok) {
+          const trips = await res.json();
+          const destsMap = new Map();
+          
+          trips.forEach((trip: any) => {
+            if (trip.stops) {
+              trip.stops.forEach((stop: any) => {
+                if (!destsMap.has(stop.city)) {
+                  destsMap.set(stop.city, {
+                    id: stop.id,
+                    city: stop.city,
+                    country: "Global Destination",
+                    cost: "Medium",
+                    stars: (Math.random() * (5 - 4) + 4).toFixed(1),
+                    trending: Math.random() > 0.5,
+                    tags: ["Culture", "City"],
+                    image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=1000&auto=format&fit=crop"
+                  });
+                }
+              });
+            }
+          });
+          
+          setDestinations(Array.from(destsMap.values()));
+        }
+      } catch (err) {
+        console.error("Failed to load destinations", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchDestinations();
+  }, []);
+
+  const filtered = destinations.filter(dest => {
     const matchesQuery = dest.city.toLowerCase().includes(query.toLowerCase()) ||
                          dest.country.toLowerCase().includes(query.toLowerCase());
     const matchesTag = activeTag === "All" || dest.tags.includes(activeTag);
@@ -67,7 +96,7 @@ export default function SearchCityPage() {
       </div>
 
       {/* Tag Filters */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
         {ALL_TAGS.map(tag => (
           <button
             key={tag}
@@ -84,7 +113,7 @@ export default function SearchCityPage() {
       </div>
 
       {/* Results Grid */}
-      {filtered.length > 0 ? (
+      {!isLoading && filtered.length > 0 ? (
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -134,7 +163,7 @@ export default function SearchCityPage() {
                 </div>
 
                 <div className="flex gap-1.5 mt-3">
-                  {dest.tags.map(tag => (
+                  {dest.tags.map((tag: string) => (
                     <span key={tag} className="text-[10px] font-medium px-2 py-0.5 bg-white/10 rounded-full text-white/60">
                       {tag}
                     </span>
@@ -155,7 +184,7 @@ export default function SearchCityPage() {
           </div>
           <h3 className="text-xl font-heading font-bold text-white mb-2">No destinations found</h3>
           <p className="text-white/60 max-w-sm">
-            Try searching for a different city or adjusting your filters.
+            Try searching for a different city or exploring community trips to add more destinations!
           </p>
         </motion.div>
       )}

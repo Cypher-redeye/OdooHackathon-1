@@ -1,31 +1,69 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, MapPin, Eye, Edit2, Trash2, PlusCircle, Compass } from "lucide-react";
 import Link from "next/link";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 
-const ALL_TRIPS = [
-  { id: 1, status: "Upcoming", name: "Summer in Kyoto", dates: "Jul 10 - Jul 24", budget: "$2,000", destCount: 3, image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1000&auto=format&fit=crop" },
-  { id: 2, status: "Upcoming", name: "Alpine Adventure", dates: "Sep 05 - Sep 12", budget: "$1,500", destCount: 2, image: "https://images.unsplash.com/photo-1522163182402-834f871fd851?q=80&w=1000&auto=format&fit=crop" },
-  { id: 3, status: "Past", name: "New York Weekend", dates: "Dec 10 - Dec 14", budget: "$1,200", destCount: 1, image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=1000&auto=format&fit=crop" },
-  { id: 4, status: "Draft", name: "Bali Retreat", dates: "TBD", budget: "TBD", destCount: 0, image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1000&auto=format&fit=crop" },
-];
-
 const FILTERS = ["All", "Upcoming", "Past", "Draft"];
 
 export default function MyTripsPage() {
   const [activeFilter, setActiveFilter] = useState("All");
-  const [trips, setTrips] = useState(ALL_TRIPS);
+  const [trips, setTrips] = useState<any[]>([]);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        let userId = 1; // Fallback
+        if (token) {
+          try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            if (payload.id) userId = payload.id;
+          } catch (e) {}
+        }
+        
+        const res = await fetch(`http://localhost:5000/api/trips/${userId}`);
+        if (res.ok) {
+          const fetchedTrips = await res.json();
+          // Map backend format to frontend format
+          const formattedTrips = fetchedTrips.map((t: any) => ({
+            id: t.id,
+            status: "Upcoming",
+            name: t.name,
+            dates: `${new Date(t.startDate).toLocaleDateString()} - ${new Date(t.endDate).toLocaleDateString()}`,
+            budget: "TBD",
+            destCount: t.stops?.length || 0,
+            image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1000&auto=format&fit=crop"
+          }));
+          setTrips(formattedTrips);
+        }
+      } catch (err) {
+        console.error("Failed to fetch trips", err);
+      }
+    };
+    fetchTrips();
+  }, []);
 
   const filteredTrips = trips.filter(trip => activeFilter === "All" || trip.status === activeFilter);
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (deleteId) {
-      setTrips(trips.filter(t => t.id !== deleteId));
-      setDeleteId(null);
+      try {
+        const res = await fetch(`http://localhost:5000/api/trips/${deleteId}`, {
+          method: "DELETE"
+        });
+        if (res.ok) {
+          setTrips(trips.filter(t => t.id !== deleteId));
+          setDeleteId(null);
+        } else {
+          alert("Failed to delete trip");
+        }
+      } catch (err) {
+        console.error("Delete error:", err);
+      }
     }
   };
 

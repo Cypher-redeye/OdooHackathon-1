@@ -1,141 +1,166 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { Sparkles, AlertCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { DollarSign, PieChart, TrendingDown, Plus, Wallet, ShoppingBag, Utensils, Plane, Loader2, X } from "lucide-react";
+import { PieChart as RePie, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
-const PIE_DATA = [
-  { name: 'Transport', value: 800, color: '#A0724B' },
-  { name: 'Stay', value: 1200, color: '#8B6914' },
-  { name: 'Activities', value: 400, color: '#F59E0B' },
-  { name: 'Meals', value: 600, color: '#2D6A4F' },
-];
+export default function ItineraryBudgetPage({ params }: { params: { id: string } }) {
+  const [budget, setBudget] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAdding, setIsAdding] = useState(false);
+  const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState("Transport");
 
-const BAR_DATA = [
-  { day: 'Day 1', cost: 150 },
-  { day: 'Day 2', cost: 300 },
-  { day: 'Day 3', cost: 200 },
-  { day: 'Day 4', cost: 400 },
-  { day: 'Day 5', cost: 250 },
-];
+  useEffect(() => {
+    const fetchBudget = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/budget/${params.id}`);
+        if (res.ok) setBudget(await res.json());
+      } catch (err) {
+        console.error("Fetch error:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchBudget();
+  }, [params.id]);
 
-export default function BudgetPage({ params }: { params: { id: string } }) {
-  const totalBudget = 3000;
-  const totalSpent = 2400; // Mock data
-  const percentage = (totalSpent / totalBudget) * 100;
+  const handleAddExpense = async () => {
+    const val = parseFloat(amount);
+    if (isNaN(val) || val <= 0) return;
+
+    const updatedBudget = { ...budget };
+    const key = category.toLowerCase();
+    updatedBudget[key] = (updatedBudget[key] || 0) + val;
+
+    try {
+      const res = await fetch(`http://localhost:5000/api/budget/${params.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedBudget)
+      });
+      if (res.ok) {
+        setBudget(await res.json());
+        setAmount("");
+        setIsAdding(false);
+      }
+    } catch (err) {
+      console.error("Save error:", err);
+    }
+  };
+
+  if (isLoading) return <div className="flex items-center justify-center h-64"><Loader2 className="w-8 h-8 animate-spin text-primary-400" /></div>;
+
+  const chartData = [
+    { name: 'Transport', value: budget.transport, color: '#A0724B' },
+    { name: 'Stay', value: budget.stay, color: '#825D3D' },
+    { name: 'Meals', value: budget.meals, color: '#C48B5C' },
+    { name: 'Activities', value: budget.activities, color: '#E0C097' },
+  ].filter(d => d.value > 0);
+
+  const totalSpent = budget.transport + budget.stay + budget.meals + budget.activities;
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
-      {/* Header & Total Budget */}
-      <div className="text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6">
+    <div className="space-y-8 py-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-heading font-bold text-white mb-2">Budget Overview</h1>
-          <p className="text-white/60">Track your spending for Summer in Kyoto</p>
+          <h1 className="text-3xl font-heading font-bold text-white mb-2">Budget Tracker</h1>
+          <p className="text-white/60">Manage your trip expenses efficiently.</p>
         </div>
-        <div className="glass-card p-6 min-w-[250px] text-center shadow-[0_0_30px_rgba(160,114,75,0.2)]">
-          <p className="text-sm font-medium text-white/60 mb-1">Total Estimated Cost</p>
-          <motion.h2 
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="text-4xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600"
-          >
-            $3,000
-          </motion.h2>
-        </div>
+        <button 
+          onClick={() => setIsAdding(true)}
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary-600 to-primary-800 hover:from-primary-500 hover:to-primary-700 text-white rounded-xl font-medium shadow-[0_0_15px_rgba(160,114,75,0.3)] transition-colors"
+        >
+          <Plus className="w-5 h-5" /> Add Expense
+        </button>
       </div>
 
-      {/* Health Bar */}
-      <div className="glass-card p-6">
-        <div className="flex justify-between text-sm font-medium text-white mb-2">
-          <span>Spent: ${totalSpent}</span>
-          <span className="text-primary-400">Remaining: ${totalBudget - totalSpent}</span>
-        </div>
-        <div className="h-4 bg-white/10 rounded-full overflow-hidden border border-white/5">
-          <motion.div 
-            initial={{ width: 0 }}
-            animate={{ width: `${percentage}%` }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className={`h-full rounded-full ${
-              percentage > 90 ? 'bg-red-500' : percentage > 70 ? 'bg-accent-amber' : 'bg-accent-teal'
-            }`}
-          />
-        </div>
-      </div>
-
-      {/* AI Insight */}
-      <motion.div 
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="bg-primary-900/30 border border-primary-500/30 rounded-2xl p-5 flex items-start gap-4 shadow-lg shadow-primary-500/10"
-      >
-        <div className="p-2 bg-primary-500/20 text-primary-400 rounded-lg shrink-0">
-          <Sparkles className="w-6 h-6" />
-        </div>
-        <div>
-          <h4 className="font-bold text-white mb-1">AI Insight</h4>
-          <p className="text-white/80 text-sm leading-relaxed">
-            Your accommodation cost is 40% above average for this region. Consider booking stays a bit further from the city center to save an estimated $300.
-          </p>
-        </div>
-      </motion.div>
-
-      {/* Alert Banner */}
-      <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-4 flex items-center gap-3">
-        <AlertCircle className="w-5 h-5 text-red-400" />
-        <p className="text-sm font-medium text-red-200">Day 4 exceeds your daily average budget by $150.</p>
-      </div>
-
-      {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="glass-card p-6 flex flex-col h-[400px]">
-          <h3 className="text-xl font-heading font-bold text-white mb-6">Category Breakdown</h3>
-          <div className="flex-1 min-h-0">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={PIE_DATA}
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={5}
-                  dataKey="value"
-                  stroke="none"
-                >
-                  {PIE_DATA.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#1A120D', borderColor: '#ffffff20', borderRadius: '12px' }}
-                  itemStyle={{ color: '#fff' }}
-                />
-                <Legend verticalAlign="bottom" height={36} wrapperStyle={{ color: '#fff' }}/>
-              </PieChart>
-            </ResponsiveContainer>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-1 space-y-6">
+          <div className="glass-card p-6 bg-gradient-to-br from-primary-900/40 to-transparent">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-3 bg-primary-500/20 rounded-xl text-primary-400">
+                <Wallet className="w-6 h-6" />
+              </div>
+              <span className="text-sm font-medium text-white/60 uppercase tracking-wider">Total Spent</span>
+            </div>
+            <div className="text-4xl font-heading font-bold text-white">${totalSpent.toLocaleString()}</div>
+          </div>
+          
+          <div className="glass-card p-6">
+            <h3 className="font-bold text-white mb-6">Breakdown</h3>
+            <div className="space-y-6">
+              {[
+                { name: 'Transport', value: budget.transport, icon: Plane },
+                { name: 'Accommodation', value: budget.stay, icon: Plane },
+                { name: 'Food & Dining', value: budget.meals, icon: Utensils },
+                { name: 'Activities', value: budget.activities, icon: Plane },
+              ].map((cat) => (
+                <div key={cat.name} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-white/5 rounded-lg text-white/40"><cat.icon className="w-4 h-4" /></div>
+                    <span className="text-white/80">{cat.name}</span>
+                  </div>
+                  <span className="font-bold text-white">${cat.value.toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="glass-card p-6 flex flex-col h-[400px]">
-          <h3 className="text-xl font-heading font-bold text-white mb-6">Daily Spending</h3>
-          <div className="flex-1 min-h-0">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={BAR_DATA}>
-                <XAxis dataKey="day" stroke="#ffffff60" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#ffffff60" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}`} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#1A120D', borderColor: '#ffffff20', borderRadius: '12px' }}
-                  cursor={{ fill: '#ffffff10' }}
-                />
-                <Bar dataKey="cost" fill="#A0724B" radius={[4, 4, 0, 0]}>
-                  {BAR_DATA.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.cost > 300 ? '#F5C842' : '#A0724B'} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+        <div className="lg:col-span-2 glass-card p-8 flex flex-col items-center justify-center min-h-[400px]">
+          {chartData.length > 0 ? (
+            <div className="w-full h-[350px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <RePie>
+                  <Pie data={chartData} innerRadius={80} outerRadius={120} paddingAngle={8} dataKey="value">
+                    {chartData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
+                  </Pie>
+                  <Tooltip contentStyle={{ backgroundColor: '#1A120D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#fff' }} />
+                </RePie>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <div className="text-center">
+              <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                <PieChart className="w-10 h-10 text-white/20" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">No expenses yet</h3>
+              <p className="text-white/40 max-w-xs">Start adding your expenses to see a visual breakdown of your trip budget.</p>
+            </div>
+          )}
         </div>
       </div>
+
+      <AnimatePresence>
+        {isAdding && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="bg-[#1A120D] border border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-white font-heading">Add Expense</h2>
+                <button onClick={() => setIsAdding(false)} className="text-white/40 hover:text-white"><X className="w-6 h-6" /></button>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm text-white/60 mb-1 block">Amount ($)</label>
+                  <input type="number" value={amount} onChange={e => setAmount(e.target.value)} className="w-full glass-input" placeholder="0.00" />
+                </div>
+                <div>
+                  <label className="text-sm text-white/60 mb-1 block">Category</label>
+                  <select value={category} onChange={e => setCategory(e.target.value)} className="w-full glass-input appearance-none bg-[#1A120D]">
+                    <option value="Transport">Transport</option>
+                    <option value="Stay">Accommodation</option>
+                    <option value="Meals">Food & Dining</option>
+                    <option value="Activities">Activities</option>
+                  </select>
+                </div>
+                <button onClick={handleAddExpense} className="w-full py-3 bg-primary-600 hover:bg-primary-500 text-white rounded-xl font-medium mt-4">Add Expense</button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

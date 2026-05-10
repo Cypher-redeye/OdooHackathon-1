@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Map, Search, User, PlusCircle } from "lucide-react";
+import { Home, Map, Search, User, PlusCircle, Users, Settings } from "lucide-react";
 import { clsx } from "clsx";
 
 const navItems = [
   { href: "/dashboard", label: "Home", icon: Home },
   { href: "/trips", label: "My Trips", icon: Map },
   { href: "/search/city", label: "Search", icon: Search },
+  { href: "/community", label: "Community", icon: Users },
+  { href: "/admin", label: "Admin Panel", icon: Settings },
   { href: "/profile", label: "Profile", icon: User },
 ];
 
