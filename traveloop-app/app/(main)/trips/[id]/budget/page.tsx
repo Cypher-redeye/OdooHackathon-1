@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { API_URL } from "@/lib/api";
-import { DollarSign, PieChart, TrendingDown, Plus, Wallet, ShoppingBag, Utensils, Plane, Loader2, X, Sparkles, Brain, Lightbulb, ArrowRight } from "lucide-react";
+import { DollarSign, PieChart, TrendingDown, Plus, Wallet, ShoppingBag, Utensils, Plane, Loader2, X, Sparkles, Brain, Lightbulb, ArrowRight, Home, Compass } from "lucide-react";
 import { PieChart as RePie, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 export default function ItineraryBudgetPage({ params }: { params: { id: string } }) {
