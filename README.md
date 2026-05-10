@@ -1,1 +1,1 @@
-# OddoHackathon
+# OdooHackathon
