@@ -11,7 +11,8 @@ Built for the **Odoo Hackathon 2026**.
 ## 📸 Screenshots
 
 ### 🏠 Landing Page — Hero
-![Landing Hero](screenshots/01-landing-hero.jpeg)
+![Landing Hero]<img width="1600" height="942" alt="01-landing-hero" src="https://github.com/user-attachments/assets/9999c4bb-0103-4433-8424-f5c467ae3823" />
+
 
 ### 🗺️ Popular Destinations
 ![Popular Destinations](screenshots/02-popular-destinations.jpeg)
