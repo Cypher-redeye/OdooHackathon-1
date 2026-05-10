@@ -1,0 +1,55 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  password String
+  trips    Trip[]
+}
+
+model Trip {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  startDate   DateTime
+  endDate     DateTime
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  stops       Stop[]
+  budget      Budget?
+}
+
+model Stop {
+  id        Int       @id @default(autoincrement())
+  city      String
+  startDate DateTime
+  endDate   DateTime
+  tripId    Int
+  trip      Trip      @relation(fields: [tripId], references: [id])
+  activities Activity[]
+}
+
+model Activity {
+  id     Int    @id @default(autoincrement())
+  name   String
+  cost   Float
+  stopId Int
+  stop   Stop   @relation(fields: [stopId], references: [id])
+}
+
+model Budget {
+  id         Int    @id @default(autoincrement())
+  transport  Float
+  stay       Float
+  meals      Float
+  activities Float
+  tripId     Int    @unique   // one-to-one fix
+  trip       Trip   @relation(fields: [tripId], references: [id])
+}
