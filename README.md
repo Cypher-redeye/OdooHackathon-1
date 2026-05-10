@@ -169,7 +169,7 @@ Server runs on [http://localhost:5000](http://localhost:5000)
 | Screen | Route | Description |
 |---|---|---|
 | Auth | `/` | Sign in / Sign up with animated background |
-| Dashboard | `/dashboard` | Welcome stats, upcoming trips, popular destinations |
+| Dashboard | `/blob:https://web.whatsapp.com/1b1a0ea9-c42d-4e5a-90c7-9e50616fd967` | Welcome stats, upcoming trips, popular destinations |
 | My Trips | `/trips` | Trip cards with filter, delete, view/edit actions |
 | Create Trip | `/trips/create` | Multi-step trip creation form |
 | Itinerary Builder | `/trips/[id]/builder` | Drag-and-drop stop & activity manager |
