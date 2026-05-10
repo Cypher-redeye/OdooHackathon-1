@@ -48,6 +48,8 @@ Built for the **Odoo Hackathon 2026**.
 ---
 
 ## 📁 Project Structure
+
+```
 OdooHackathon/
 ├── traveloop-app/          # Next.js frontend
 │   ├── app/
@@ -86,13 +88,19 @@ OdooHackathon/
     ├── prisma.config.ts    # Prisma 7 config
     ├── server.js           # Entry point
     └── package.json
+```
+
+---
 
 ## 🗄️ Database Schema
+
+```
 User        → id, email, password
 Trip        → id, name, description, startDate, endDate, userId
 Stop        → id, city, startDate, endDate, tripId
 Activity    → id, name, cost, stopId
 Budget      → id, transport, stay, meals, activities, tripId
+```
 
 ---
 
@@ -103,8 +111,6 @@ Budget      → id, transport, stay, meals, activities, tripId
 - npm ≥ 9
 - A [Neon](https://neon.tech) PostgreSQL database
 
----
-
 ### Frontend
 
 ```bash
@@ -114,8 +120,6 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
-
----
 
 ### Backend
 
