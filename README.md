@@ -15,36 +15,46 @@ Built for the **Odoo Hackathon 2026**.
 
 
 ### 🗺️ Popular Destinations
-![Popular Destinations](screenshots/02-popular-destinations.jpeg)
+![Popular Destinations]<img width="1600" height="860" alt="02-popular-destinations" src="https://github.com/user-attachments/assets/3b52fd18-bbaa-48a6-a08e-790b04b1e694" />
+
 
 ### 🔐 Authentication
-![Auth Screen](screenshots/03-auth.jpeg)
+![Auth Screen]<img width="1600" height="857" alt="03-auth" src="https://github.com/user-attachments/assets/c6abd946-44bb-475e-9bd6-6c68395f7212" />
+
 
 ### 📊 Traveler Dashboard
-![Dashboard](screenshots/04-dashboard.jpeg)
+![Dashboard]<img width="1600" height="938" alt="04-dashboard" src="https://github.com/user-attachments/assets/63caf11e-b08f-4a5c-98d2-42ba354f1ab3" />
+
 
 ### 🧳 My Trips
-![My Trips](screenshots/05-my-trips.jpeg)
+![My Trips]<img width="1600" height="946" alt="05-my-trips" src="https://github.com/user-attachments/assets/a32273c0-e848-4419-9a45-0da3527c08f7" />
+
 
 ### 🔍 Explore Destinations
-![Explore](screenshots/06-explore.jpeg)
+![Explore]<img width="1600" height="858" alt="06-explore" src="https://github.com/user-attachments/assets/6c4fbc99-1b0d-43a9-b876-532f445291f6" />
+
 
 ### 🗓️ Itinerary Builder
-![Itinerary Builder](screenshots/07-itinerary-builder.jpeg)
+![Itinerary Builder]<img width="1600" height="887" alt="07-itinerary-builder" src="https://github.com/user-attachments/assets/12ca15ab-3fbc-4f16-882f-0ad0cec2b4b3" />
+
 
 ### 🎯 Discover Activities
-![Discover Activities](screenshots/08-discover-activities.jpeg)
+![Discover Activities]<img width="1600" height="863" alt="08-discover-activities" src="https://github.com/user-attachments/assets/1685d0fe-8b3f-41d8-9af0-7c2170841673" />
+
 
 ### 👥 Community — Traveler Hub
-![Community](screenshots/09-community.jpeg)
+![Community]<img width="1600" height="861" alt="09-community" src="https://github.com/user-attachments/assets/22c9f894-582c-4809-85c6-5a16ade4b14b" />
+
 
 ### 🛡️ Admin Dashboard
-![Admin Dashboard](screenshots/10-admin-dashboard.jpeg)
+![Admin Dashboard]<img width="1276" height="768" alt="10-admin-dashboard" src="https://github.com/user-attachments/assets/74147829-d20d-4702-9d7f-bdac28ab97c6" />
 
-![Admin Dashboard Detail](screenshots/11-admin-closeup.jpeg)
+
+![Admin Dashboard Detail]<img width="1600" height="859" alt="11-admin-closeup" src="https://github.com/user-attachments/assets/ef142384-7bf7-44f9-981a-62e9467b8829" />
 
 ### 👤 User Profile
-![Profile](screenshots/12-profile.jpeg)
+![Profile]<img width="1600" height="863" alt="12-profile" src="https://github.com/user-attachments/assets/3a02de2e-3d73-490d-be39-3833eede95c0" />
+
 
 ---
 
