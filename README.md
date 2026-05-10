@@ -11,43 +11,39 @@ Built for the **Odoo Hackathon 2026**.
 | Feature | Description |
 |---|---|
 | 🗺️ Itinerary Builder | Drag-and-drop stops, add activities, and build day-by-day travel plans |
-| 💰 Budget Tracker | Visual spending charts, daily budget health, and cost insights |
+| 💰 Budget Tracker | Visual pie/bar charts, daily spending alerts, and AI-powered cost insights |
 | 🔍 Explore Destinations | Search and filter destinations by tags (Beach, Culture, Luxury, etc.) |
-| 🔗 Share Trips | Public itinerary view with timeline, copy-trip, and community feed |
-| 👤 User Profile | Personal travel stats, bio, and custom profile images |
-| 🎨 Premium UI | Cocoa & Butter Yellow aesthetic with glassmorphism and smooth Framer Motion animations |
-| 🔐 Robust Security | JWT-based auth with granular ownership checks and protection against ID enumeration |
-
----
-
-## 🔐 Security & Robustness
-
-This project underwent a strict security audit to ensure production-grade safety:
-
-- **Authentication**: JWT-based session management with `bcrypt` password hashing.
-- **Granular Authorization**: Every API request (`Packing`, `Notes`, `Stops`, `Activities`, `Budget`) verifies trip ownership. Users can only access or modify their own data.
-- **Injection Protection**: All database queries use Prisma ORM to prevent SQL injection.
-- **Security Headers**: Implemented manual middleware for `X-Content-Type-Options`, `X-Frame-Options` (Clickjacking protection), and `X-XSS-Protection`.
-- **Input Validation**: Server-side length and format validation for profile and trip inputs.
-- **CORS**: Restricted origins to prevent unauthorized cross-origin requests.
+| 🔗 Share Trips | Public itinerary view with timeline, copy-trip, and social sharing |
+| 👤 User Profile | Personal travel stats, preferences, and settings |
+| 🎨 Glassmorphism UI | Stunning dark-mode design with backdrop-blur, gradients, and micro-animations |
+| 🔐 Auth API | JWT-based signup/login with bcrypt password hashing |
+| 🗄️ Database | PostgreSQL on Neon (serverless) via Prisma ORM |
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **Framework**: Next.js 14 (App Router)
-- **Styling**: Tailwind CSS 3 (Custom Cocoa & Butter Yellow theme)
-- **Animations**: Framer Motion
-- **Icons**: Lucide React
-- **Auth**: @react-oauth/google (Google Login) + Custom JWT
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 14 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS 3 + custom glassmorphism design system |
+| Animations | Framer Motion |
+| Charts | Recharts |
+| Icons | Lucide React |
+| Drag & Drop | @dnd-kit |
+| Fonts | Clash Display + Cabinet Grotesk |
 
 ### Backend
-- **Runtime**: Node.js v24
-- **Framework**: Express.js v5
-- **ORM**: Prisma v7
-- **Database**: PostgreSQL (Neon serverless)
-- **Auth**: JWT + bcryptjs
+| Layer | Technology |
+|---|---|
+| Runtime | Node.js v24 |
+| Framework | Express.js v5 |
+| ORM | Prisma v7 |
+| Database | PostgreSQL (Neon serverless) |
+| Auth | JWT + bcryptjs |
+| DB Adapter | @prisma/adapter-neon |
 
 ---
 
@@ -58,23 +54,52 @@ OdooHackathon/
 ├── traveloop-app/          # Next.js frontend
 │   ├── app/
 │   │   ├── (main)/
-│   │   │   ├── dashboard/  # Traveler Dashboard
-│   │   │   ├── trips/      # Trip Management & List
-│   │   │   ├── search/     # Discovery Engine
-│   │   │   └── profile/    # User Profile
-│   │   ├── auth/           # Login/Signup/Forgot Password
-│   ├── components/         # Reusable UI Components
-│   └── tailwind.config.ts  # Theme configuration
+│   │   │   ├── dashboard/
+│   │   │   ├── trips/
+│   │   │   │   ├── [id]/
+│   │   │   │   │   ├── budget/
+│   │   │   │   │   └── builder/
+│   │   │   │   └── create/
+│   │   │   ├── search/city/
+│   │   │   └── profile/
+│   │   ├── auth/
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── components/
+│   │   ├── Navbar.tsx
+│   │   ├── Sidebar.tsx
+│   │   ├── BottomNav.tsx
+│   │   └── ConfirmDialog.tsx
+│   ├── lib/
+│   │   └── utils.ts
+│   ├── tailwind.config.ts
+│   └── package.json
 │
 └── backend/                # Express.js backend
-    ├── middleware/
-    │   └── auth.js         # JWT Verification Middleware
+    ├── lib/
+    │   └── prisma.js       # Prisma client with Neon adapter
+    ├── prisma/
+    │   ├── schema.prisma   # DB models
+    │   └── migrations/
     ├── routes/
-    │   ├── auth.js         # Auth & Profile Routes
-    │   ├── trip.js         # Core Trip & Ownership logic
-    │   └── ...             # Resource-specific routes
-    ├── server.js           # Security-hardened entry point
-    └── prisma/             # Schema & Migrations
+    │   ├── auth.js         # /api/auth/signup, /api/auth/login
+    │   └── trip.js         # /api/trips
+    ├── prisma.config.ts    # Prisma 7 config
+    ├── server.js           # Entry point
+    └── package.json
+```
+
+---
+
+## 🗄️ Database Schema
+
+```
+User        → id, email, password
+Trip        → id, name, description, startDate, endDate, userId
+Stop        → id, city, startDate, endDate, tripId
+Activity    → id, name, cost, stopId
+Budget      → id, transport, stay, meals, activities, tripId
 ```
 
 ---
@@ -87,55 +112,90 @@ OdooHackathon/
 - A [Neon](https://neon.tech) PostgreSQL database
 
 ### Frontend
+
 ```bash
 cd traveloop-app
 npm install
 npm run dev
 ```
+
 Open [http://localhost:3000](http://localhost:3000)
 
 ### Backend
+
 ```bash
 cd backend
 npm install
 ```
+
 Create a `.env` file in the `backend` folder:
+
 ```env
 DATABASE_URL="your-neon-postgresql-connection-string"
 JWT_SECRET="your-secret-key"
 PORT=5000
 ```
+
 Then run:
+
 ```bash
 npx prisma generate
+npx prisma migrate dev --name init
 npm run dev
 ```
 
+Server runs on [http://localhost:5000](http://localhost:5000)
+
 ---
 
-## 📡 API Endpoints (Protected)
+## 📡 API Endpoints
 
+### Auth
 | Method | Endpoint | Description |
 |---|---|---|
-| POST | `/api/auth/login` | Login & receive JWT |
-| PATCH | `/api/auth/profile` | Update user name/image (Validated) |
-| GET | `/api/trips` | Get user's own trips |
-| POST | `/api/trips` | Create trip with auto-stops |
-| DELETE | `/api/trips/:id` | Delete trip (Ownership checked) |
-| GET | `/api/trips/all` | **Public** Community Feed |
+| POST | `/api/auth/signup` | Register a new user |
+| POST | `/api/auth/login` | Login and receive JWT token |
+
+### Trips
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/trips` | Create a new trip |
+| GET | `/api/trips/:userId` | Get all trips for a user |
+
+---
+
+## 📱 Screens
+
+| Screen | Route | Description |
+|---|---|---|
+| Auth | `/` | Sign in / Sign up with animated background |
+| Dashboard | `/dashboard` | Welcome stats, upcoming trips, popular destinations |
+| My Trips | `/trips` | Trip cards with filter, delete, view/edit actions |
+| Create Trip | `/trips/create` | Multi-step trip creation form |
+| Itinerary Builder | `/trips/[id]/builder` | Drag-and-drop stop & activity manager |
+| Budget Tracker | `/trips/[id]/budget` | Spending charts, health bar, AI insights |
+| Trip Detail | `/trips/[id]` | Public-style trip view with timeline |
+| Explore | `/search/city` | Destination search with tag filters |
+| Profile | `/profile` | User info, travel stats, preferences |
 
 ---
 
 ## 🎨 Design System
 
-- **Background**: Deep Cocoa (`#0A0705`)
-- **Primary**: Butter Yellow (`#E4C48C`)
-- **Secondary**: Muted Gold (`#A0724B`)
-- **Glass Cards**: `bg-white/5 backdrop-blur-xl border-white/10`
-- **Typography**: Clash Display + Cabinet Grotesk
+- **Background:** Deep space gradient (`#0f0c29 → #302b63 → #24243e`)
+- **Primary:** Violet-Indigo gradient (`#7C3AED → #4F46E5`)
+- **Accent Colors:** Amber (`#F59E0B`) for warnings, Teal (`#0D9488`) for success
+- **Glass Cards:** `bg-white/10 backdrop-blur-md border-white/20`
+- **Typography:** Clash Display (headings) + Cabinet Grotesk (body)
 
 ---
 
 ## 👥 Team
 
 Built with ❤️ for the **Odoo Hackathon 2026**.
+
+---
+
+## 📄 License
+
+This project is built for educational and hackathon purposes.
