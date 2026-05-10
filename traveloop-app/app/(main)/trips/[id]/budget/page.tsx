@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { API_URL } from "@/lib/api";
 import { DollarSign, PieChart, TrendingDown, Plus, Wallet, ShoppingBag, Utensils, Plane, Loader2, X, Sparkles, Brain, Lightbulb, ArrowRight } from "lucide-react";
 import { PieChart as RePie, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -19,7 +20,7 @@ export default function ItineraryBudgetPage({ params }: { params: { id: string }
     const fetchBudget = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`http://127.0.0.1:5000/api/budget/${params.id}`, {
+        const res = await fetch(`${API_URL}/api/budget/${params.id}`, {
           headers: { "Authorization": `Bearer ${token}` }
         });
         if (res.ok) setBudget(await res.json());
@@ -75,7 +76,7 @@ export default function ItineraryBudgetPage({ params }: { params: { id: string }
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://127.0.0.1:5000/api/budget/${params.id}`, {
+      const res = await fetch(`${API_URL}/api/budget/${params.id}`, {
         method: "PATCH",
         headers: { 
           "Content-Type": "application/json",

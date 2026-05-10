@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { API_URL } from "@/lib/api";
 import { Search, MapPin, Star, DollarSign, TrendingUp, Filter, X } from "lucide-react";
 
 const ALL_TAGS = ["All", "Beach", "Culture", "Romance", "Luxury", "Food", "City", "Shopping"];
@@ -40,7 +41,7 @@ export default function SearchCityPage() {
   useEffect(() => {
     const fetchDestinations = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:5000/api/trips/all");
+        const res = await fetch(`${API_URL}/api/trips/all`);
         let communityDests: any[] = [];
         
         if (res.ok) {

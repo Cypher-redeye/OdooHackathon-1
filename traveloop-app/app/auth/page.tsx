@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useGoogleLogin } from "@react-oauth/google";
+import { API_URL } from "@/lib/api";
 
 const QUOTES = [
   "The world is a book and those who do not travel read only one page.",
@@ -110,7 +111,7 @@ export default function AuthPage() {
       if (authMode === "forgot") {
         const email = inputs[0].value;
         const newPassword = inputs[1].value;
-        const res = await fetch("http://127.0.0.1:5000/api/auth/reset-password", {
+        const res = await fetch(`${API_URL}/api/auth/reset-password`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, newPassword }),
@@ -140,7 +141,7 @@ export default function AuthPage() {
       const endpoint = authMode === "login" ? "/api/auth/login" : "/api/auth/signup";
       const bodyPayload = authMode === "login" ? { email, password } : { name, email, password };
       
-      const response = await fetch(`http://127.0.0.1:5000${endpoint}`, {
+      const response = await fetch(`${API_URL}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bodyPayload),
@@ -175,7 +176,7 @@ export default function AuthPage() {
           headers: { Authorization: `Bearer ${response.access_token}` },
         });
         const userInfo = await userInfoRes.json();
-        const res = await fetch("http://127.0.0.1:5000/api/auth/google", {
+        const res = await fetch(`${API_URL}/api/auth/google`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ profile: userInfo }),

@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Upload, X, MapPin, Calendar as CalendarIcon, CheckCircle2, Loader2, Image as ImageIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/lib/api";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -86,7 +87,7 @@ export default function CreateTripPage() {
         } catch (e) {}
       }
 
-      const response = await fetch("http://127.0.0.1:5000/api/trips", {
+      const response = await fetch(`${API_URL}/api/trips`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

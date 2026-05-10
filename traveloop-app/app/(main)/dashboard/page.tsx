@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Plane, Calendar, Wallet, Plus, Loader2, Compass, ArrowRight, Star } from "lucide-react";
 import Link from "next/link";
+import { API_URL } from "@/lib/api";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -58,7 +59,7 @@ export default function DashboardPage() {
 
         try {
           // Using 127.0.0.1 for maximum reliability on Windows local environments
-          const res = await fetch(`http://127.0.0.1:5000/api/trips`, {
+          const res = await fetch(`${API_URL}/api/trips`, {
             headers: {
               "Authorization": `Bearer ${token}`
             }

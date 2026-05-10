@@ -5,6 +5,7 @@ import { LogOut, Bell, RefreshCw, User as UserIcon, Home, Compass, Map } from "l
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { API_URL } from "@/lib/api";
 
 export function Navbar() {
   const router = useRouter();
@@ -44,7 +45,7 @@ export function Navbar() {
 
       // 2. Fresh fetch from server
       const urls = [
-        "http://127.0.0.1:5000/api/auth/me"
+        `${API_URL}/api/auth/me`
       ];
 
       for (const url of urls) {

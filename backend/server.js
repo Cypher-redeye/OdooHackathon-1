@@ -24,7 +24,13 @@ app.use((req, res, next) => {
 });
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3001"],
+  origin: [
+    "http://localhost:3000", 
+    "http://127.0.0.1:3000", 
+    "http://localhost:3001",
+    "https://odoohackathon-9sx4.onrender.com", // Your Render Backend
+    process.env.FRONTEND_URL // Future Vercel URL
+  ].filter(Boolean),
   credentials: true,
 };
 app.use(cors(corsOptions));

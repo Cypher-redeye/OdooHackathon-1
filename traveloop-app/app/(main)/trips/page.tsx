@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, MapPin, Eye, Edit2, Trash2, PlusCircle, Compass, Search, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { API_URL } from "@/lib/api";
 
 const FILTERS = ["All", "Upcoming", "Past", "Draft"];
 
@@ -31,7 +32,7 @@ export default function MyTripsPage() {
           } catch (e) {}
         }
         
-        const res = await fetch(`http://127.0.0.1:5000/api/trips`, {
+        const res = await fetch(`${API_URL}/api/trips`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -68,7 +69,7 @@ export default function MyTripsPage() {
     if (deleteId) {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`http://127.0.0.1:5000/api/trips/${deleteId}`, {
+        const res = await fetch(`${API_URL}/api/trips/${deleteId}`, {
           method: "DELETE",
           headers: { "Authorization": `Bearer ${token}` }
         });

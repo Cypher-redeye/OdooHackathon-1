@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, ArrowUpDown, Plus, Calendar, MapPin, ChevronDown, Trash2, X, Loader2 } from "lucide-react";
+import { API_URL } from "@/lib/api";
 
 export default function TripNotesPage({ params }: { params: { id: string } }) {
   const [notes, setNotes] = useState<any[]>([]);
@@ -17,7 +18,7 @@ export default function TripNotesPage({ params }: { params: { id: string } }) {
     const fetchNotes = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`http://127.0.0.1:5000/api/notes/${params.id}`, {
+        const res = await fetch(`${API_URL}/api/notes/${params.id}`, {
           headers: { "Authorization": `Bearer ${token}` }
         });
         if (res.ok) setNotes(await res.json());
@@ -34,7 +35,7 @@ export default function TripNotesPage({ params }: { params: { id: string } }) {
     if (!newTitle || !newContent) return;
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://127.0.0.1:5000/api/notes", {
+      const res = await fetch(`${API_URL}/api/notes`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -57,7 +58,7 @@ export default function TripNotesPage({ params }: { params: { id: string } }) {
   const handleDeleteNote = async (id: number) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://127.0.0.1:5000/api/notes/${id}`, {
+      const res = await fetch(`${API_URL}/api/notes/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, ArrowUpDown, MessageSquare, Heart, Share2, MapPin, Calendar, Compass, Star, ExternalLink, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { API_URL } from "@/lib/api";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -25,7 +26,7 @@ export default function CommunityPage() {
       setIsLoading(true);
       try {
         // Using 127.0.0.1 for maximum reliability on local environments
-        const res = await fetch("http://127.0.0.1:5000/api/trips/all");
+        const res = await fetch(`${API_URL}/api/trips/all`);
         if (res.ok) {
           const trips = await res.json();
           const posts = trips.map((trip: any) => {

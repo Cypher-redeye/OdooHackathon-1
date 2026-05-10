@@ -1,5 +1,6 @@
 "use client";
 
+import { API_URL } from "@/lib/api";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -108,7 +109,7 @@ export default function ItineraryBuilderPage({ params }: { params: { id: string 
   const fetchTrip = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://127.0.0.1:5000/api/trips/${params.id}`, {
+      const res = await fetch(`${API_URL}/api/trips/${params.id}`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (res.ok) {
@@ -133,7 +134,7 @@ export default function ItineraryBuilderPage({ params }: { params: { id: string 
     if (!newCity || !newStartDate || !newEndDate) return;
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://127.0.0.1:5000/api/stops", {
+      const res = await fetch(`${API_URL}/api/stops`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -164,7 +165,7 @@ export default function ItineraryBuilderPage({ params }: { params: { id: string 
   const handleDeleteStop = async (stopId: number) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://127.0.0.1:5000/api/stops/${stopId}`, {
+      const res = await fetch(`${API_URL}/api/stops/${stopId}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });
@@ -190,7 +191,7 @@ export default function ItineraryBuilderPage({ params }: { params: { id: string 
       
       try {
         const token = localStorage.getItem("token");
-        await fetch("http://127.0.0.1:5000/api/stops/reorder", {
+        await fetch(`${API_URL}/api/stops/reorder`, {
           method: "PATCH",
           headers: { 
             "Content-Type": "application/json",
@@ -210,7 +211,7 @@ export default function ItineraryBuilderPage({ params }: { params: { id: string 
     if (!actName || !actCost || !activeStopId) return;
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://127.0.0.1:5000/api/activities", {
+      const res = await fetch(`${API_URL}/api/activities`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -237,7 +238,7 @@ export default function ItineraryBuilderPage({ params }: { params: { id: string 
   const handleDeleteActivity = async (actId: number) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://127.0.0.1:5000/api/activities/${actId}`, {
+      const res = await fetch(`${API_URL}/api/activities/${actId}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });

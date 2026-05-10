@@ -8,6 +8,7 @@ import {
   RefreshCcw, Phone, CreditCard, ShieldCheck, LifeBuoy
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/lib/api";
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
@@ -30,7 +31,7 @@ export default function ProfilePage() {
 
     try {
       // Try 127.0.0.1 to avoid localhost IPv6 resolution issues on Windows
-      const res = await fetch("http://127.0.0.1:5000/api/auth/me", {
+      const res = await fetch(`${API_URL}/api/auth/me`, {
         headers: { 
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
@@ -68,7 +69,7 @@ export default function ProfilePage() {
       const base64 = reader.result as string;
       const token = localStorage.getItem("token");
       try {
-        const res = await fetch("http://127.0.0.1:5000/api/auth/profile", {
+        const res = await fetch(`${API_URL}/api/auth/profile`, {
           method: "PATCH",
           headers: { 
             "Authorization": `Bearer ${token}`,

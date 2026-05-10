@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Share2, Link as LinkIcon, Twitter, Copy, MapPin, Calendar, Clock, DollarSign, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/lib/api";
 
 export default function PublicItineraryPage({ params }: { params: { id: string } }) {
   const [trip, setTrip] = useState<any>(null);
@@ -14,7 +15,7 @@ export default function PublicItineraryPage({ params }: { params: { id: string }
   useEffect(() => {
     const fetchTrip = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:5000/api/trips/single/${params.id}`);
+        const res = await fetch(`${API_URL}/api/trips/single/${params.id}`);
         if (res.ok) {
           setTrip(await res.json());
         } else {
@@ -44,7 +45,7 @@ export default function PublicItineraryPage({ params }: { params: { id: string }
         if (payload.id) userId = payload.id;
       } catch (e) {}
 
-      const res = await fetch("http://127.0.0.1:5000/api/trips", {
+      const res = await fetch(`${API_URL}/api/trips`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

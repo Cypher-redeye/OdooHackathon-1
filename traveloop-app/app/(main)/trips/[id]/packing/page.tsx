@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, ArrowUpDown, CheckSquare, Square, Plus, Trash2, Loader2 } from "lucide-react";
+import { API_URL } from "@/lib/api";
 
 const CATEGORY_LIST = ["Documents", "Clothing", "Electronics", "Toiletries", "Miscellaneous"];
 
@@ -16,7 +17,7 @@ export default function PackingChecklistPage({ params }: { params: { id: string 
     const fetchItems = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`http://127.0.0.1:5000/api/packing/${params.id}`, {
+        const res = await fetch(`${API_URL}/api/packing/${params.id}`, {
           headers: { "Authorization": `Bearer ${token}` }
         });
         if (res.ok) setItems(await res.json());
@@ -32,7 +33,7 @@ export default function PackingChecklistPage({ params }: { params: { id: string 
   const toggleItem = async (itemId: number, currentStatus: boolean) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://127.0.0.1:5000/api/packing/${itemId}`, {
+      const res = await fetch(`${API_URL}/api/packing/${itemId}`, {
         method: "PATCH",
         headers: { 
           "Content-Type": "application/json",
@@ -51,7 +52,7 @@ export default function PackingChecklistPage({ params }: { params: { id: string 
   const deleteItem = async (itemId: number) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://127.0.0.1:5000/api/packing/${itemId}`, {
+      const res = await fetch(`${API_URL}/api/packing/${itemId}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });
@@ -67,7 +68,7 @@ export default function PackingChecklistPage({ params }: { params: { id: string 
     
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://127.0.0.1:5000/api/packing", {
+      const res = await fetch(`${API_URL}/api/packing`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
