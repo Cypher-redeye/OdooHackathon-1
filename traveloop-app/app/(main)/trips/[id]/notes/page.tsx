@@ -16,7 +16,10 @@ export default function TripNotesPage({ params }: { params: { id: string } }) {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/notes/${params.id}`);
+        const token = localStorage.getItem("token");
+        const res = await fetch(`http://127.0.0.1:5000/api/notes/${params.id}`, {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
         if (res.ok) setNotes(await res.json());
       } catch (err) {
         console.error("Fetch error:", err);
@@ -30,9 +33,13 @@ export default function TripNotesPage({ params }: { params: { id: string } }) {
   const handleAddNote = async () => {
     if (!newTitle || !newContent) return;
     try {
-      const res = await fetch("http://localhost:5000/api/notes", {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://127.0.0.1:5000/api/notes", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ title: newTitle, content: newContent, category: "General", tripId: params.id })
       });
       if (res.ok) {
@@ -49,8 +56,10 @@ export default function TripNotesPage({ params }: { params: { id: string } }) {
 
   const handleDeleteNote = async (id: number) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/notes/${id}`, {
-        method: "DELETE"
+      const token = localStorage.getItem("token");
+      const res = await fetch(`http://127.0.0.1:5000/api/notes/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
       });
       if (res.ok) setNotes(notes.filter(n => n.id !== id));
     } catch (err) {

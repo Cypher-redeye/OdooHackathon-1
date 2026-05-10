@@ -8,32 +8,41 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  password String
-  trips    Trip[]
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  image     String?
+  trips     Trip[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Trip {
-  id          Int       @id @default(autoincrement())
-  name        String
-  description String?
-  startDate   DateTime
-  endDate     DateTime
-  userId      Int
-  user        User      @relation(fields: [userId], references: [id])
-  stops       Stop[]
-  budget      Budget?
+  id           Int           @id @default(autoincrement())
+  name         String
+  description  String?
+  startDate    DateTime
+  endDate      DateTime
+  userId       Int
+  user         User          @relation(fields: [userId], references: [id])
+  stops        Stop[]
+  budget       Budget?
+  imageUrl     String?
+  packingItems PackingItem[]
+  notes        Note[]
 }
 
 model Stop {
-  id        Int       @id @default(autoincrement())
-  city      String
-  startDate DateTime
-  endDate   DateTime
-  tripId    Int
-  trip      Trip      @relation(fields: [tripId], references: [id])
-  activities Activity[]
+  id          Int        @id @default(autoincrement())
+  city        String
+  description String?
+  startDate   DateTime?
+  endDate     DateTime?
+  tripId      Int
+  trip        Trip       @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  order       Int        @default(0)
+  activities  Activity[]
 }
 
 model Activity {
@@ -41,15 +50,34 @@ model Activity {
   name   String
   cost   Float
   stopId Int
-  stop   Stop   @relation(fields: [stopId], references: [id])
+  stop   Stop   @relation(fields: [stopId], references: [id], onDelete: Cascade)
 }
 
 model Budget {
   id         Int    @id @default(autoincrement())
-  transport  Float
-  stay       Float
-  meals      Float
-  activities Float
-  tripId     Int    @unique   // one-to-one fix
-  trip       Trip   @relation(fields: [tripId], references: [id])
+  transport  Float  @default(0)
+  stay       Float  @default(0)
+  meals      Float  @default(0)
+  activities Float  @default(0)
+  tripId     Int    @unique
+  trip       Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+}
+
+model PackingItem {
+  id        Int     @id @default(autoincrement())
+  name      String
+  category  String
+  packed    Boolean @default(false)
+  tripId    Int
+  trip      Trip    @relation(fields: [tripId], references: [id], onDelete: Cascade)
+}
+
+model Note {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  category  String
+  createdAt DateTime @default(now())
+  tripId    Int
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
 }

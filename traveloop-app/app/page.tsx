@@ -39,15 +39,20 @@ export default function LandingPage() {
       <div className="grid-bg" />
 
       {/* Floating pills */}
-      <div className="float-pill" style={{ top: "18%", left: "3%", animationDuration: "6s" }}>✈️ Paris, France</div>
-      <div className="float-pill" style={{ top: "32%", right: "3%", animationDuration: "7.5s", animationDelay: "1s" }}>🏝 Bali, Indonesia</div>
-      <div className="float-pill" style={{ bottom: "35%", left: "2%", animationDuration: "5.5s", animationDelay: "2s" }}>🗼 Tokyo, Japan</div>
-      <div className="float-pill" style={{ bottom: "22%", right: "3%", animationDuration: "8s", animationDelay: "0.5s" }}>🌅 Dubai, UAE</div>
+      <div className="float-pill" style={{ top: "18%", left: "3%", animationDuration: "6s" }}>🗼 Eiffel Tower, Paris</div>
+      <div className="float-pill" style={{ top: "32%", right: "3%", animationDuration: "7.5s", animationDelay: "1s" }}>🏝 Uluwatu, Bali</div>
+      <div className="float-pill" style={{ bottom: "35%", left: "2%", animationDuration: "5.5s", animationDelay: "2s" }}>🏯 Senso-ji, Tokyo</div>
+      <div className="float-pill" style={{ bottom: "22%", right: "3%", animationDuration: "8s", animationDelay: "0.5s" }}>🏙 Burj Khalifa, Dubai</div>
 
       {/* Navbar */}
       <nav className="land-nav">
         <Link href="/" className="nav-logo">
-          <div className="nav-logo-icon">✈️</div>
+          <img 
+            src="/logo.png" 
+            alt="Traveloop Logo" 
+            className="logo-img"
+            style={{ height: "36px", width: "auto", objectFit: "contain", borderRadius: "8px" }}
+          />
           <span className="nav-logo-text">Traveloop</span>
         </Link>
         <ul className="nav-links">
@@ -88,7 +93,7 @@ export default function LandingPage() {
 
         <div className="popular-tags">
           <span className="pop-label">Popular:</span>
-          {["🌸 Bali", "🗼 Paris", "🏯 Tokyo", "🏙 New York", "🌴 Maldives", "🕌 Dubai"].map(t => (
+          {["⛩ Uluwatu", "🗼 Eiffel Tower", "🏯 Senso-ji", "🗽 Statue of Liberty", "🌴 Maldives", "🏙 Burj Khalifa"].map(t => (
             <span key={t} className="tag-pill">{t}</span>
           ))}
         </div>
@@ -106,13 +111,13 @@ export default function LandingPage() {
         </div>
         <div className="dest-grid">
           {[
-            { cls: "bali", badge: "🔥 Trending", badgeStyle: {}, name: "Bali", country: "Indonesia", price: "From ₹45,000", rating: "★★★★★ 4.9", dur: "7–14 day trips" },
-            { cls: "paris", badge: "💎 Premium", badgeStyle: { background: "rgba(59,130,246,0.2)", borderColor: "rgba(59,130,246,0.4)", color: "#93C5FD" }, name: "Paris", country: "France", price: "From ₹1,20,000", rating: "★★★★★ 4.8", dur: "5–10 day trips", aspect: "3/3.5" },
-            { cls: "tokyo", badge: "✨ Must Visit", badgeStyle: { background: "rgba(167,139,250,0.2)", borderColor: "rgba(167,139,250,0.4)", color: "#C4B5FD" }, name: "Tokyo", country: "Japan", price: "From ₹85,000", rating: "★★★★★ 4.9", dur: "7–12 day trips" },
-            { cls: "dubai", badge: "🔥 Trending", badgeStyle: {}, name: "Dubai", country: "UAE", price: "From ₹60,000", rating: "★★★★☆ 4.7", dur: "4–7 day trips", aspect: "3/3.5" },
+            { cls: "bali", img: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800", badge: "🔥 Trending", badgeStyle: {}, name: "Bali", country: "Indonesia", price: "From ₹45,000", rating: "★★★★★ 4.9", dur: "7–14 day trips" },
+            { cls: "paris", img: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800", badge: "💎 Premium", badgeStyle: { background: "rgba(59,130,246,0.2)", borderColor: "rgba(59,130,246,0.4)", color: "#93C5FD" }, name: "Paris", country: "France", price: "From ₹1,20,000", rating: "★★★★★ 4.8", dur: "5–10 day trips", aspect: "3/3.5" },
+            { cls: "tokyo", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800", badge: "✨ Must Visit", badgeStyle: { background: "rgba(167,139,250,0.2)", borderColor: "rgba(167,139,250,0.4)", color: "#C4B5FD" }, name: "Tokyo", country: "Japan", price: "From ₹85,000", rating: "★★★★★ 4.9", dur: "7–12 day trips" },
+            { cls: "dubai", img: "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800", badge: "🔥 Trending", badgeStyle: {}, name: "Dubai", country: "UAE", price: "From ₹60,000", rating: "★★★★☆ 4.7", dur: "4–7 day trips", aspect: "3/3.5" },
           ].map(d => (
             <div key={d.name} className="dest-card" style={d.aspect ? { aspectRatio: d.aspect } : {}}>
-              <div className={`dest-img ${d.cls}`} />
+              <div className="dest-img" style={{ backgroundImage: `url(${d.img})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }} />
               <div className="dest-overlay" />
               <div className="dest-content">
                 <div className="dest-badge" style={d.badgeStyle}>{d.badge}</div>
@@ -235,7 +240,11 @@ export default function LandingPage() {
         <div className="footer-top">
           <div className="footer-brand">
             <Link href="/" className="nav-logo" style={{ textDecoration: "none", marginBottom: "0.5rem", display: "inline-flex" }}>
-              <div className="nav-logo-icon" style={{ width: 32, height: 32, fontSize: 15, borderRadius: 8 }}>✈️</div>
+              <img 
+                src="/logo.png" 
+                alt="Traveloop Logo" 
+                style={{ height: "32px", width: "auto", objectFit: "contain", marginRight: "12px", borderRadius: "6px" }}
+              />
               <span className="nav-logo-text" style={{ fontSize: "1.2rem" }}>Traveloop</span>
             </Link>
             <p>Your intelligent travel planning companion. Dream, plan, and explore the world effortlessly.</p>

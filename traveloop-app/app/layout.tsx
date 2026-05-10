@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   description: "Plan, organize, and share personalized travel itineraries with ease. Build multi-city trips, track budgets, and explore 50,000+ destinations.",
 };
 
+import { Providers } from "@/components/Providers";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -19,7 +21,9 @@ export default function RootLayout({
         <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@100,200,300,400,500,700,800,900&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased overflow-x-hidden">
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

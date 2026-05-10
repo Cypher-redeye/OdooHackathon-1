@@ -15,7 +15,10 @@ export default function PackingChecklistPage({ params }: { params: { id: string 
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/packing/${params.id}`);
+        const token = localStorage.getItem("token");
+        const res = await fetch(`http://127.0.0.1:5000/api/packing/${params.id}`, {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
         if (res.ok) setItems(await res.json());
       } catch (err) {
         console.error("Fetch error:", err);
@@ -28,9 +31,13 @@ export default function PackingChecklistPage({ params }: { params: { id: string 
 
   const toggleItem = async (itemId: number, currentStatus: boolean) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/packing/${itemId}`, {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`http://127.0.0.1:5000/api/packing/${itemId}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ packed: !currentStatus })
       });
       if (res.ok) {
@@ -43,8 +50,10 @@ export default function PackingChecklistPage({ params }: { params: { id: string 
 
   const deleteItem = async (itemId: number) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/packing/${itemId}`, {
-        method: "DELETE"
+      const token = localStorage.getItem("token");
+      const res = await fetch(`http://127.0.0.1:5000/api/packing/${itemId}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
       });
       if (res.ok) setItems(items.filter(item => item.id !== itemId));
     } catch (err) {
@@ -57,9 +66,13 @@ export default function PackingChecklistPage({ params }: { params: { id: string 
     if (!text || text.trim() === "") return;
     
     try {
-      const res = await fetch("http://localhost:5000/api/packing", {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://127.0.0.1:5000/api/packing", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ name: text.trim(), category, tripId: params.id })
       });
       if (res.ok) {

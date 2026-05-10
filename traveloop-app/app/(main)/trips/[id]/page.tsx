@@ -14,7 +14,7 @@ export default function PublicItineraryPage({ params }: { params: { id: string }
   useEffect(() => {
     const fetchTrip = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/trips/single/${params.id}`);
+        const res = await fetch(`http://127.0.0.1:5000/api/trips/single/${params.id}`);
         if (res.ok) {
           setTrip(await res.json());
         } else {
@@ -44,9 +44,12 @@ export default function PublicItineraryPage({ params }: { params: { id: string }
         if (payload.id) userId = payload.id;
       } catch (e) {}
 
-      const res = await fetch("http://localhost:5000/api/trips", {
+      const res = await fetch("http://127.0.0.1:5000/api/trips", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({
           name: `${trip.name} (Copy)`,
           description: trip.description,
@@ -86,7 +89,7 @@ export default function PublicItineraryPage({ params }: { params: { id: string }
     );
   }
 
-  const tripImage = "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2000&auto=format&fit=crop";
+  const tripImage = trip.imageUrl || "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2000&auto=format&fit=crop";
   const startDate = new Date(trip.startDate).toLocaleDateString();
   const endDate = new Date(trip.endDate).toLocaleDateString();
 
@@ -146,7 +149,14 @@ export default function PublicItineraryPage({ params }: { params: { id: string }
             <button className="flex-1 sm:flex-none p-3 glass-button text-white/70 hover:text-[#1DA1F2] group" title="Share on Twitter">
               <Twitter className="w-5 h-5 group-hover:scale-110 transition-transform" />
             </button>
-            <button className="flex-1 sm:flex-none p-3 glass-button text-white/70 hover:text-white group" title="Copy Link">
+            <button 
+              onClick={() => {
+                navigator.clipboard.writeText(window.location.href);
+                alert("Link copied to clipboard!");
+              }}
+              className="flex-1 sm:flex-none p-3 glass-button text-white/70 hover:text-white group" 
+              title="Copy Link"
+            >
               <LinkIcon className="w-5 h-5 group-hover:scale-110 transition-transform" />
             </button>
           </div>
