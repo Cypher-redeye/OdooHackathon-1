@@ -5,10 +5,10 @@ import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveCo
 import { Sparkles, AlertCircle } from "lucide-react";
 
 const PIE_DATA = [
-  { name: 'Transport', value: 800, color: '#4F46E5' },
-  { name: 'Stay', value: 1200, color: '#7C3AED' },
+  { name: 'Transport', value: 800, color: '#A0724B' },
+  { name: 'Stay', value: 1200, color: '#8B6914' },
   { name: 'Activities', value: 400, color: '#F59E0B' },
-  { name: 'Meals', value: 600, color: '#0D9488' },
+  { name: 'Meals', value: 600, color: '#2D6A4F' },
 ];
 
 const BAR_DATA = [
@@ -32,7 +32,7 @@ export default function BudgetPage({ params }: { params: { id: string } }) {
           <h1 className="text-3xl font-heading font-bold text-white mb-2">Budget Overview</h1>
           <p className="text-white/60">Track your spending for Summer in Kyoto</p>
         </div>
-        <div className="glass-card p-6 min-w-[250px] text-center shadow-[0_0_30px_rgba(124,58,237,0.2)]">
+        <div className="glass-card p-6 min-w-[250px] text-center shadow-[0_0_30px_rgba(160,114,75,0.2)]">
           <p className="text-sm font-medium text-white/60 mb-1">Total Estimated Cost</p>
           <motion.h2 
             initial={{ scale: 0.5, opacity: 0 }}
@@ -106,7 +106,7 @@ export default function BudgetPage({ params }: { params: { id: string } }) {
                   ))}
                 </Pie>
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#131127', borderColor: '#ffffff20', borderRadius: '12px' }}
+                  contentStyle={{ backgroundColor: '#1A120D', borderColor: '#ffffff20', borderRadius: '12px' }}
                   itemStyle={{ color: '#fff' }}
                 />
                 <Legend verticalAlign="bottom" height={36} wrapperStyle={{ color: '#fff' }}/>
@@ -123,12 +123,12 @@ export default function BudgetPage({ params }: { params: { id: string } }) {
                 <XAxis dataKey="day" stroke="#ffffff60" fontSize={12} tickLine={false} axisLine={false} />
                 <YAxis stroke="#ffffff60" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}`} />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#131127', borderColor: '#ffffff20', borderRadius: '12px' }}
+                  contentStyle={{ backgroundColor: '#1A120D', borderColor: '#ffffff20', borderRadius: '12px' }}
                   cursor={{ fill: '#ffffff10' }}
                 />
-                <Bar dataKey="cost" fill="#7C3AED" radius={[4, 4, 0, 0]}>
+                <Bar dataKey="cost" fill="#A0724B" radius={[4, 4, 0, 0]}>
                   {BAR_DATA.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.cost > 300 ? '#F59E0B' : '#7C3AED'} />
+                    <Cell key={`cell-${index}`} fill={entry.cost > 300 ? '#F5C842' : '#A0724B'} />
                   ))}
                 </Bar>
               </BarChart>

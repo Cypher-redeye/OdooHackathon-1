@@ -100,7 +100,7 @@ export default function SearchCityPage() {
             >
               <div className="h-52 relative overflow-hidden">
                 <img src={dest.image} alt={dest.city} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0f0c29] via-[#0f0c29]/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F0A07] via-[#0F0A07]/30 to-transparent" />
 
                 {dest.trending && (
                   <div className="absolute top-3 left-3 z-20 flex items-center gap-1 px-2.5 py-1 bg-accent-amber/20 backdrop-blur-md border border-accent-amber/30 rounded-full text-[10px] font-bold text-accent-amber uppercase tracking-wider">

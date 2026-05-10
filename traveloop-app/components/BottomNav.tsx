@@ -17,7 +17,7 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#0f0c29]/90 backdrop-blur-lg border-t border-white/10 z-50 flex items-center justify-around px-2">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#0F0A07]/90 backdrop-blur-lg border-t border-white/10 z-50 flex items-center justify-around px-2">
       {navItems.map((item) => {
         const isActive = pathname.startsWith(item.href);
         return (
@@ -29,7 +29,7 @@ export function BottomNav() {
             {isActive && (
               <motion.div
                 layoutId="bottom-nav-indicator"
-                className="absolute top-1 w-12 h-1 bg-primary-500 rounded-full shadow-[0_0_8px_rgba(124,58,237,0.8)]"
+                className="absolute top-1 w-12 h-1 bg-primary-500 rounded-full shadow-[0_0_8px_rgba(160,114,75,0.8)]"
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
               />
             )}

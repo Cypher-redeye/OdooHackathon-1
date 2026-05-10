@@ -47,7 +47,7 @@ export default function ProfilePage() {
           <div className="flex flex-col sm:flex-row items-start sm:items-end gap-4 -mt-12">
             {/* Avatar */}
             <div className="relative">
-              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-3xl font-heading font-bold text-white border-4 border-[#0f0c29] shadow-xl">
+              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-3xl font-heading font-bold text-white border-4 border-[#0F0A07] shadow-xl">
                 T
               </div>
               <button className="absolute -bottom-1 -right-1 w-7 h-7 bg-primary-500 rounded-lg flex items-center justify-center text-white hover:bg-primary-400 transition-colors shadow-lg">

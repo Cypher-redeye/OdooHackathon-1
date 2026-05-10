@@ -59,7 +59,7 @@ export default function DashboardPage() {
         >
           <Link 
             href="/trips/create"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-950 hover:from-primary-500 hover:to-primary-800 text-white rounded-xl font-medium shadow-[0_0_20px_rgba(124,58,237,0.4)] transition-all hover:scale-105"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-950 hover:from-primary-500 hover:to-primary-800 text-white rounded-xl font-medium shadow-[0_0_20px_rgba(160,114,75,0.4)] transition-all hover:scale-105"
           >
             <Plus className="w-5 h-5" />
             Plan New Trip
@@ -144,7 +144,7 @@ export default function DashboardPage() {
             <motion.div key={dest.id} variants={itemVariants} className="glass-card overflow-hidden group cursor-pointer relative">
               <div className="h-60 relative overflow-hidden">
                 <img src={dest.image} alt={dest.city} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0f0c29] via-[#0f0c29]/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F0A07] via-[#0F0A07]/40 to-transparent" />
               </div>
               
               <div className="absolute bottom-0 left-0 right-0 p-5">

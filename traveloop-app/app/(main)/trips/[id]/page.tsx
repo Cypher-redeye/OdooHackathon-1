@@ -33,11 +33,11 @@ const PUBLIC_TRIP = {
 
 export default function PublicItineraryPage({ params }: { params: { id: string } }) {
   return (
-    <div className="min-h-screen bg-[#0f0c29] text-white selection:bg-primary-500/30 pb-20">
+    <div className="min-h-screen bg-[#0F0A07] text-white selection:bg-primary-500/30 pb-20">
       {/* Top Banner */}
       <div className="relative h-[60vh] min-h-[400px] w-full">
         <div className="absolute inset-0 bg-black/40 z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0f0c29] via-transparent to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0F0A07] via-transparent to-transparent z-10" />
         <img 
           src={PUBLIC_TRIP.image} 
           alt={PUBLIC_TRIP.name} 
@@ -72,7 +72,7 @@ export default function PublicItineraryPage({ params }: { params: { id: string }
       <div className="max-w-5xl mx-auto px-4 md:px-8 mt-8">
         {/* Action Bar */}
         <div className="glass-card p-4 flex flex-col sm:flex-row items-center justify-between gap-4 mb-12 sticky top-4 z-40">
-          <button className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-primary-600 to-primary-950 hover:from-primary-500 hover:to-primary-800 text-white rounded-xl font-medium shadow-[0_0_20px_rgba(124,58,237,0.3)] transition-all flex items-center justify-center gap-2 hover:scale-105">
+          <button className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-primary-600 to-primary-950 hover:from-primary-500 hover:to-primary-800 text-white rounded-xl font-medium shadow-[0_0_20px_rgba(160,114,75,0.3)] transition-all flex items-center justify-center gap-2 hover:scale-105">
             <Copy className="w-5 h-5" />
             Copy This Trip
           </button>
@@ -105,7 +105,7 @@ export default function PublicItineraryPage({ params }: { params: { id: string }
                 {/* Date Header (Left col on desktop, top on mobile) */}
                 <div className="md:col-span-3 text-left md:text-right mb-6 md:mb-0 relative">
                   {/* Timeline dot */}
-                  <div className="absolute left-[-32px] md:left-auto md:right-[-25px] top-2 w-4 h-4 rounded-full bg-primary-500 shadow-[0_0_10px_rgba(124,58,237,0.8)] z-10 border-2 border-[#0f0c29]" />
+                  <div className="absolute left-[-32px] md:left-auto md:right-[-25px] top-2 w-4 h-4 rounded-full bg-primary-500 shadow-[0_0_10px_rgba(160,114,75,0.8)] z-10 border-2 border-[#0F0A07]" />
                   
                   <h3 className="text-2xl font-heading font-bold text-white">{day.date}</h3>
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 rounded-full text-sm font-medium text-primary-300 mt-2">

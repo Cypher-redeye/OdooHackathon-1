@@ -19,7 +19,7 @@ export function Sidebar() {
     <aside className="hidden md:flex flex-col w-64 border-r border-white/10 bg-white/5 backdrop-blur-md h-[calc(100vh-4rem)] sticky top-16 p-4 overflow-y-auto">
       <Link 
         href="/trips/create"
-        className="flex items-center gap-3 px-4 py-3 mb-6 bg-primary-600 hover:bg-primary-500 text-white rounded-xl transition-all shadow-[0_0_15px_rgba(124,58,237,0.3)] hover:shadow-[0_0_20px_rgba(124,58,237,0.5)]"
+        className="flex items-center gap-3 px-4 py-3 mb-6 bg-primary-600 hover:bg-primary-500 text-white rounded-xl transition-all shadow-[0_0_15px_rgba(160,114,75,0.3)] hover:shadow-[0_0_20px_rgba(160,114,75,0.5)]"
       >
         <PlusCircle className="w-5 h-5" />
         <span className="font-medium">Plan New Trip</span>
@@ -35,7 +35,7 @@ export function Sidebar() {
               className={clsx(
                 "flex items-center gap-3 px-4 py-3 rounded-xl transition-all",
                 isActive 
-                  ? "bg-white/10 text-white shadow-[inset_4px_0_0_rgba(124,58,237,1)]" 
+                  ? "bg-white/10 text-white shadow-[inset_4px_0_0_rgba(160,114,75,1)]" 
                   : "text-white/60 hover:bg-white/5 hover:text-white"
               )}
             >

@@ -10,28 +10,28 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          50: '#f5f3ff',
-          100: '#ede9fe',
-          200: '#ddd6fe',
-          300: '#c4b5fd',
-          400: '#a78bfa',
-          500: '#8b5cf6',
-          600: '#7c3aed', // Primary gradient start
-          700: '#6d28d9',
-          800: '#5b21b6',
-          900: '#4c1d95',
-          950: '#4f46e5', // Primary gradient end (indigo)
+          50: '#FDF8F0',
+          100: '#F9ECDA',
+          200: '#F0D5B0',
+          300: '#E8C9A0',
+          400: '#D4A574',
+          500: '#B8865A',
+          600: '#A0724B', // Primary gradient start (warm cocoa)
+          700: '#8B5E3C',
+          800: '#6B4226',
+          900: '#5C3A2E',
+          950: '#8B6914', // Primary gradient end (deep gold)
         },
         accent: {
-          amber: '#F59E0B',
-          teal: '#0D9488',
+          amber: '#F5C842',   // Butter yellow
+          teal: '#2D6A4F',    // Sage green
         }
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        "primary-gradient": "linear-gradient(to right, #7C3AED, #4F46E5)",
+        "primary-gradient": "linear-gradient(to right, #A0724B, #8B6914)",
       },
       fontFamily: {
         heading: ['var(--font-clash-display)', 'sans-serif'],

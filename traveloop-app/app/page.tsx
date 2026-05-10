@@ -1,220 +1,259 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Lock, User, Eye, EyeOff, ArrowRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
+import Link from "next/link";
+import "./landing.css";
 
-export default function AuthPage() {
-  const [isLogin, setIsLogin] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [dimensions, setDimensions] = useState({ width: 1000, height: 1000 });
-  const router = useRouter();
+export default function LandingPage() {
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
-    setDimensions({ width: window.innerWidth, height: window.innerHeight });
+    observerRef.current = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).style.opacity = "1";
+          (entry.target as HTMLElement).style.transform = "translateY(0)";
+          observerRef.current?.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".dest-card, .trip-card, .how-card, .test-card").forEach(el => {
+      (el as HTMLElement).style.opacity = "0";
+      (el as HTMLElement).style.transform = "translateY(30px)";
+      (el as HTMLElement).style.transition = "opacity 0.6s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1)";
+      observerRef.current?.observe(el);
+    });
+
+    return () => observerRef.current?.disconnect();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      router.push("/dashboard");
-    }, 1500);
-  };
-
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 z-0">
-        <motion.div
-          animate={{
-            x: [0, 100, 0],
-            y: [0, -50, 0],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-600/30 rounded-full blur-[100px]"
-        />
-        <motion.div
-          animate={{
-            x: [0, -100, 0],
-            y: [0, 100, 0],
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary-950/40 rounded-full blur-[100px]"
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-          }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent-teal/10 rounded-full blur-[120px]"
-        />
-        
-        {/* Floating Destination Pills */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <div className="absolute top-20 left-20 px-4 py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm">Paris</div>
-          <div className="absolute bottom-40 right-20 px-4 py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm">Bali</div>
-          <div className="absolute top-40 right-40 px-4 py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm">Tokyo</div>
-          <div className="absolute bottom-20 left-40 px-4 py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm">Dubai</div>
+    <div style={{ fontFamily: "'DM Sans', sans-serif", background: "#08060F", color: "#F5F3FF", minHeight: "100vh" }}>
+      {/* Background */}
+      <div className="bg-scene">
+        <div className="orb orb1" />
+        <div className="orb orb2" />
+        <div className="orb orb3" />
+      </div>
+      <div className="grid-bg" />
+
+      {/* Floating pills */}
+      <div className="float-pill" style={{ top: "18%", left: "3%", animationDuration: "6s" }}>✈️ Paris, France</div>
+      <div className="float-pill" style={{ top: "32%", right: "3%", animationDuration: "7.5s", animationDelay: "1s" }}>🏝 Bali, Indonesia</div>
+      <div className="float-pill" style={{ bottom: "35%", left: "2%", animationDuration: "5.5s", animationDelay: "2s" }}>🗼 Tokyo, Japan</div>
+      <div className="float-pill" style={{ bottom: "22%", right: "3%", animationDuration: "8s", animationDelay: "0.5s" }}>🌅 Dubai, UAE</div>
+
+      {/* Navbar */}
+      <nav className="land-nav">
+        <Link href="/" className="nav-logo">
+          <div className="nav-logo-icon">✈️</div>
+          <span className="nav-logo-text">Traveloop</span>
+        </Link>
+        <ul className="nav-links">
+          <li><a href="#" className="active">Home</a></li>
+          <li><a href="#destinations">Destinations</a></li>
+          <li><a href="#trips">Trips</a></li>
+          <li><a href="#how">How It Works</a></li>
+        </ul>
+        <div className="nav-right">
+          <Link href="/auth"><button className="btn-ghost">Sign In</button></Link>
+          <Link href="/auth"><button className="btn-nav-cta">Start Planning →</button></Link>
+        </div>
+      </nav>
+
+      {/* Hero */}
+      <section className="hero">
+        <div className="hero-badge">
+          <span className="badge-dot" />
+          ✨ Over 10,000 trips planned this month
+        </div>
+        <h1>
+          Discover the World,<br />
+          <span className="line2">Plan Every Adventure</span>
+        </h1>
+        <p className="hero-sub">
+          Traveloop is your intelligent travel companion — build multi-city itineraries, track your budget, and share unforgettable journeys.
+        </p>
+
+
+        {/* Search bar */}
+        <div className="search-card">
+          <div className="search-field"><span className="sf-label">🌍 Destination</span><div className="sf-value"><span>Where do you want to go?</span></div></div>
+          <div className="search-field"><span className="sf-label">📅 Departure</span><div className="sf-value"><span>Add dates</span></div></div>
+          <div className="search-field"><span className="sf-label">📅 Return</span><div className="sf-value"><span>Add dates</span></div></div>
+          <div className="search-field"><span className="sf-label">👥 Travelers</span><div className="sf-value"><span>1 traveler</span></div></div>
+          <button className="search-btn">🔍 Search</button>
+        </div>
+
+        <div className="popular-tags">
+          <span className="pop-label">Popular:</span>
+          {["🌸 Bali", "🗼 Paris", "🏯 Tokyo", "🏙 New York", "🌴 Maldives", "🕌 Dubai"].map(t => (
+            <span key={t} className="tag-pill">{t}</span>
+          ))}
+        </div>
+      </section>
+
+      {/* Destinations */}
+      <section id="destinations" className="land-section">
+        <div className="flex-between section-header">
+          <div>
+            <div className="section-eyebrow">Explore</div>
+            <h2 className="section-title">Popular <span>Destinations</span></h2>
+            <p className="section-sub">Hand-picked destinations loved by thousands of travelers worldwide.</p>
+          </div>
+          <a href="#" className="see-all">View all destinations →</a>
+        </div>
+        <div className="dest-grid">
+          {[
+            { cls: "bali", badge: "🔥 Trending", badgeStyle: {}, name: "Bali", country: "Indonesia", price: "From ₹45,000", rating: "★★★★★ 4.9", dur: "7–14 day trips" },
+            { cls: "paris", badge: "💎 Premium", badgeStyle: { background: "rgba(59,130,246,0.2)", borderColor: "rgba(59,130,246,0.4)", color: "#93C5FD" }, name: "Paris", country: "France", price: "From ₹1,20,000", rating: "★★★★★ 4.8", dur: "5–10 day trips", aspect: "3/3.5" },
+            { cls: "tokyo", badge: "✨ Must Visit", badgeStyle: { background: "rgba(167,139,250,0.2)", borderColor: "rgba(167,139,250,0.4)", color: "#C4B5FD" }, name: "Tokyo", country: "Japan", price: "From ₹85,000", rating: "★★★★★ 4.9", dur: "7–12 day trips" },
+            { cls: "dubai", badge: "🔥 Trending", badgeStyle: {}, name: "Dubai", country: "UAE", price: "From ₹60,000", rating: "★★★★☆ 4.7", dur: "4–7 day trips", aspect: "3/3.5" },
+          ].map(d => (
+            <div key={d.name} className="dest-card" style={d.aspect ? { aspectRatio: d.aspect } : {}}>
+              <div className={`dest-img ${d.cls}`} />
+              <div className="dest-overlay" />
+              <div className="dest-content">
+                <div className="dest-badge" style={d.badgeStyle}>{d.badge}</div>
+                <div className="dest-name">{d.name}</div>
+                <div className="dest-country">🌍 {d.country}</div>
+                <div className="dest-meta">
+                  <span className="dest-price">{d.price}</span>
+                  <span className="dest-rating">{d.rating}</span>
+                </div>
+              </div>
+              <div className="dest-glass">
+                <span style={{ fontSize: "0.78rem", color: "rgba(245,243,255,0.55)" }}>{d.dur}</span>
+                <button className="add-trip-btn">+ Add to Trip</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Featured Trips */}
+      <section id="trips" className="land-section">
+        <div className="flex-between section-header">
+          <div>
+            <div className="section-eyebrow">Community</div>
+            <h2 className="section-title">Featured <span>Trip Plans</span></h2>
+            <p className="section-sub">Real itineraries shared by our community. Copy and customize them.</p>
+          </div>
+          <a href="#" className="see-all">View all trips →</a>
+        </div>
+        <div className="trips-scroll">
+          {[
+            { cover: "tc-europe", label: "🇪🇺 Europe", days: "14 days", name: "Grand European Tour", dates: "📅 Jun 15 – Jun 29, 2025", budget: "₹1,85,000", stops: "📍 6 stops" },
+            { cover: "tc-asia", label: "🌏 Southeast Asia", days: "21 days", name: "Southeast Asia Backpack", dates: "📅 Jul 1 – Jul 22, 2025", budget: "₹95,000", stops: "📍 8 stops" },
+            { cover: "tc-ocean", label: "🏝 Island Hopping", days: "10 days", name: "Maldives & Sri Lanka", dates: "📅 Aug 10 – Aug 20, 2025", budget: "₹1,40,000", stops: "📍 4 stops" },
+            { cover: "tc-nature", label: "🌿 Nature", days: "8 days", name: "Nepal Himalaya Trek", dates: "📅 Sep 5 – Sep 13, 2025", budget: "₹65,000", stops: "📍 3 stops" },
+          ].map(t => (
+            <div key={t.name} className="trip-card">
+              <div className={`trip-cover ${t.cover}`}>
+                <div className="trip-cover-label">{t.label}</div>
+                <div className="trip-cover-days">{t.days}</div>
+              </div>
+              <div className="trip-body">
+                <div className="trip-name">{t.name}</div>
+                <div className="trip-dates">{t.dates}</div>
+                <div className="trip-foot">
+                  <span className="trip-budget">{t.budget}</span>
+                  <span className="trip-stops">{t.stops}</span>
+                </div>
+                <div className="trip-actions">
+                  <button className="ta-btn ta-view">View Plan</button>
+                  <button className="ta-btn ta-edit">Copy Trip</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section id="how" className="land-section">
+        <div className="section-header" style={{ textAlign: "center" }}>
+          <div className="section-eyebrow" style={{ textAlign: "center" }}>Simple Process</div>
+          <h2 className="section-title" style={{ textAlign: "center" }}>Plan your trip in <span>4 easy steps</span></h2>
+        </div>
+        <div className="how-grid">
+          {[
+            { num: "01", icon: "🌍", title: "Pick Your Destination", desc: "Search from 50,000+ cities worldwide. Filter by budget, region, or popularity." },
+            { num: "02", icon: "🗺️", title: "Build Your Itinerary", desc: "Add stops, assign activities to each day, and reorder with drag and drop." },
+            { num: "03", icon: "💰", title: "Track Your Budget", desc: "Automatic cost estimates, breakdowns by category, and smart budget alerts." },
+            { num: "04", icon: "🤝", title: "Share & Inspire", desc: "Publish your trip publicly or share a private link with travel companions." },
+          ].map(s => (
+            <div key={s.num} className="how-card">
+              <div className="how-num">{s.num}</div>
+              <div className="how-icon">{s.icon}</div>
+              <div className="how-title">{s.title}</div>
+              <p className="how-desc">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="land-section">
+        <div className="flex-between section-header">
+          <div>
+            <div className="section-eyebrow">Reviews</div>
+            <h2 className="section-title">Loved by <span>travelers</span></h2>
+          </div>
+        </div>
+        <div className="test-grid">
+          {[
+            { stars: "★★★★★", text: "\"Traveloop made planning our Europe trip so effortless. The budget tracker alone saved us from overspending at least 3 times!\"", av: "av1", init: "PR", name: "Priya Rajan", loc: "📍 Mumbai → Europe" },
+            { stars: "★★★★★", text: "\"The itinerary builder is brilliant. I built a 14-day Japan trip in under an hour. Shared it with my whole friend group.\"", av: "av2", init: "AK", name: "Arjun Kapoor", loc: "📍 Ahmedabad → Japan" },
+            { stars: "★★★★★", text: "\"Finally a travel app that actually works offline! Planned everything at home and used it throughout our Southeast Asia trip.\"", av: "av3", init: "SM", name: "Sara Mehta", loc: "📍 Delhi → SE Asia" },
+          ].map(r => (
+            <div key={r.name} className="test-card">
+              <div className="test-stars">{r.stars}</div>
+              <p className="test-text">{r.text}</p>
+              <div className="test-author">
+                <div className={`test-avatar ${r.av}`}>{r.init}</div>
+                <div><div className="test-name">{r.name}</div><div className="test-loc">{r.loc}</div></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA Banner */}
+      <div className="cta-banner">
+        <h2>Ready to Plan Your Dream Trip?</h2>
+        <p>Join 120,000+ travelers who plan smarter with Traveloop. It&apos;s free to start.</p>
+        <div className="cta-btns">
+          <Link href="/auth"><button className="btn-cta-main">✈️ Start Planning Free</button></Link>
+          <button className="btn-cta-sec">Watch Demo →</button>
         </div>
       </div>
 
-      {/* Grid lines overlay */}
-      <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)]"></div>
-
-      {/* Particles */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        {Array.from({ length: 40 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white/40 rounded-full"
-            initial={{
-              x: Math.random() * dimensions.width,
-              y: dimensions.height + 10,
-            }}
-            animate={{
-              y: -10,
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: Math.random() * 5 + 5,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-              ease: "linear",
-            }}
-          />
-        ))}
-      </div>
-
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ type: "spring", bounce: 0.4, duration: 0.8 }}
-        className="relative z-10 w-full max-w-md p-8 glass-card"
-      >
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-heading font-bold mb-2 text-white">Traveloop</h1>
-          <p className="text-white/60">Your personalized travel planner</p>
+      {/* Footer */}
+      <footer className="land-footer">
+        <div className="footer-top">
+          <div className="footer-brand">
+            <Link href="/" className="nav-logo" style={{ textDecoration: "none", marginBottom: "0.5rem", display: "inline-flex" }}>
+              <div className="nav-logo-icon" style={{ width: 32, height: 32, fontSize: 15, borderRadius: 8 }}>✈️</div>
+              <span className="nav-logo-text" style={{ fontSize: "1.2rem" }}>Traveloop</span>
+            </Link>
+            <p>Your intelligent travel planning companion. Dream, plan, and explore the world effortlessly.</p>
+          </div>
+          <div className="footer-links"><h4>Product</h4><ul><li><a href="#">Features</a></li><li><a href="#">Pricing</a></li><li><a href="#">Destinations</a></li><li><a href="#">Community</a></li></ul></div>
+          <div className="footer-links"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li><li><a href="#">Contact</a></li></ul></div>
+          <div className="footer-links"><h4>Legal</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Cookie Policy</a></li></ul></div>
         </div>
-
-        <div className="flex p-1 bg-white/5 rounded-xl mb-8 relative">
-          <div 
-            className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-primary-600 rounded-lg transition-all duration-300 ease-out ${isLogin ? 'left-1' : 'left-[calc(50%+2px)]'}`}
-          />
-          <button 
-            className={`flex-1 py-2 text-sm font-medium z-10 transition-colors ${isLogin ? 'text-white' : 'text-white/60 hover:text-white'}`}
-            onClick={() => setIsLogin(true)}
-          >
-            Sign In
-          </button>
-          <button 
-            className={`flex-1 py-2 text-sm font-medium z-10 transition-colors ${!isLogin ? 'text-white' : 'text-white/60 hover:text-white'}`}
-            onClick={() => setIsLogin(false)}
-          >
-            Sign Up
-          </button>
+        <div className="footer-bottom">
+          <p>© 2025 Traveloop. Built with ❤️ for explorers.</p>
+          <div className="social-row">
+            <a href="#" className="social-btn">𝕏</a>
+            <a href="#" className="social-btn">in</a>
+            <a href="#" className="social-btn">ig</a>
+            <a href="#" className="social-btn">yt</a>
+          </div>
         </div>
-
-        <AnimatePresence mode="wait">
-          <motion.form
-            key={isLogin ? "login" : "signup"}
-            initial={{ x: isLogin ? -20 : 20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: isLogin ? 20 : -20, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onSubmit={handleSubmit}
-            className="space-y-4"
-          >
-            {!isLogin && (
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
-                <input type="text" placeholder="Full Name" className="w-full glass-input pl-10" required />
-              </div>
-            )}
-            
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
-              <input type="email" placeholder="Email Address" className="w-full glass-input pl-10" required />
-            </div>
-
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
-              <input 
-                type={showPassword ? "text" : "password"} 
-                placeholder="Password" 
-                className="w-full glass-input pl-10 pr-10" 
-                required 
-              />
-              <button 
-                type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
-
-            {!isLogin && (
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  placeholder="Confirm Password" 
-                  className="w-full glass-input pl-10 pr-10" 
-                  required 
-                />
-              </div>
-            )}
-
-            {isLogin && (
-              <div className="text-right">
-                <a href="#" className="text-sm text-primary-400 hover:text-primary-300 transition-colors">Forgot Password?</a>
-              </div>
-            )}
-
-            <button 
-              type="submit" 
-              disabled={isLoading}
-              className="w-full py-3 bg-gradient-to-r from-primary-600 to-primary-950 hover:from-primary-500 hover:to-primary-800 text-white rounded-xl font-medium shadow-lg shadow-primary-600/25 transition-all duration-300 flex items-center justify-center gap-2 overflow-hidden relative group"
-            >
-              {isLoading ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                <>
-                  <span className="relative z-10">{isLogin ? "Sign In" : "Create Account"}</span>
-                  <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
-                  <div className="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out skew-x-12" />
-                </>
-              )}
-            </button>
-
-            <div className="pt-4 flex items-center gap-4">
-              <div className="flex-1 h-px bg-white/10" />
-              <span className="text-sm text-white/40">Or continue with</span>
-              <div className="flex-1 h-px bg-white/10" />
-            </div>
-
-            <div className="flex gap-4">
-              <button type="button" className="flex-1 py-2 glass-button flex items-center justify-center gap-2">
-                <svg className="w-5 h-5" viewBox="0 0 24 24">
-                  <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                </svg>
-              </button>
-              <button type="button" className="flex-1 py-2 glass-button flex items-center justify-center gap-2 text-white">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
-                </svg>
-              </button>
-            </div>
-          </motion.form>
-        </AnimatePresence>
-      </motion.div>
+      </footer>
     </div>
   );
 }

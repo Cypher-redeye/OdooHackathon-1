@@ -59,7 +59,7 @@ export default function CreateTripPage() {
           <p className="text-white/60">Step 1 of 2: Basic Details</p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-10 h-2 bg-primary-500 rounded-full shadow-[0_0_10px_rgba(124,58,237,0.5)]" />
+          <div className="w-10 h-2 bg-primary-500 rounded-full shadow-[0_0_10px_rgba(160,114,75,0.5)]" />
           <div className="w-10 h-2 bg-white/10 rounded-full" />
         </div>
       </div>
@@ -156,7 +156,7 @@ export default function CreateTripPage() {
             <button 
               type="submit" 
               disabled={isSubmitting || isSuccess}
-              className="w-full py-4 bg-gradient-to-r from-primary-600 to-primary-950 hover:from-primary-500 hover:to-primary-800 text-white rounded-xl font-medium text-lg shadow-[0_0_20px_rgba(124,58,237,0.3)] transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 bg-gradient-to-r from-primary-600 to-primary-950 hover:from-primary-500 hover:to-primary-800 text-white rounded-xl font-medium text-lg shadow-[0_0_20px_rgba(160,114,75,0.3)] transition-all flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 <Loader2 className="w-6 h-6 animate-spin" />

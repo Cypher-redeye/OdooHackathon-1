@@ -41,7 +41,7 @@ export default function MyTripsPage() {
         </div>
         <Link 
           href="/trips/create"
-          className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary-600 to-primary-950 hover:from-primary-500 hover:to-primary-800 text-white rounded-xl font-medium shadow-[0_0_15px_rgba(124,58,237,0.3)] transition-all hover:scale-105"
+          className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary-600 to-primary-950 hover:from-primary-500 hover:to-primary-800 text-white rounded-xl font-medium shadow-[0_0_15px_rgba(160,114,75,0.3)] transition-all hover:scale-105"
         >
           <PlusCircle className="w-5 h-5" />
           Plan New
@@ -163,7 +163,7 @@ export default function MyTripsPage() {
           </p>
           <Link 
             href="/trips/create"
-            className="px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-950 hover:from-primary-500 hover:to-primary-800 text-white rounded-xl font-medium shadow-[0_0_20px_rgba(124,58,237,0.3)] transition-all flex items-center gap-2 hover:scale-105"
+            className="px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-950 hover:from-primary-500 hover:to-primary-800 text-white rounded-xl font-medium shadow-[0_0_20px_rgba(160,114,75,0.3)] transition-all flex items-center gap-2 hover:scale-105"
           >
             <PlusCircle className="w-5 h-5" />
             Start Planning

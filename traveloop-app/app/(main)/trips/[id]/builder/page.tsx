@@ -133,7 +133,7 @@ export default function ItineraryBuilderPage({ params }: { params: { id: string 
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-[#131127] border-l border-white/10 z-50 shadow-2xl p-6 flex flex-col"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-[#1A120D] border-l border-white/10 z-50 shadow-2xl p-6 flex flex-col"
             >
               <div className="flex items-center justify-between mb-8">
                 <h3 className="text-2xl font-heading font-bold text-white">Add New Stop</h3>
